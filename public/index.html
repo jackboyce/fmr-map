@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HUD Fair Market Rents — Interactive Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-left">
+      <span class="header-eyebrow">HUD DATA EXPLORER</span>
+      <h1 class="header-title">Fair Market Rents</h1>
+    </div>
+    <div class="header-controls">
+      <div class="control-group">
+        <label class="control-label" for="stateSelect">STATE</label>
+        <select id="stateSelect" class="select-control">
+          <option value="">— Select a state —</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="yearSelect">FISCAL YEAR</label>
+        <select id="yearSelect" class="select-control">
+          <option value="2025" selected>FY 2025</option>
+          <option value="2024">FY 2024</option>
+          <option value="2023">FY 2023</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="bedroomSelect">BEDROOMS</label>
+        <select id="bedroomSelect" class="select-control">
+          <option value="efficiency">Studio</option>
+          <option value="one_br">1 BR</option>
+          <option value="two_br" selected>2 BR</option>
+          <option value="three_br">3 BR</option>
+          <option value="four_br">4 BR</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-body">
+
+    <!-- Map -->
+    <div id="map"></div>
+
+    <!-- Loading overlay on the map -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <span class="overlay-msg">Loading…</span>
+      </div>
+    </div>
+
+    <!-- Initial prompt message -->
+    <div id="mapMessage" class="map-message">
+      <div class="message-inner">
+        <div class="message-icon">⬆</div>
+        <p>Select a state above to load the choropleth map and explore Fair Market Rents by county.</p>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div id="mapLegend" class="map-legend hidden">
+      <div class="legend-title">Monthly FMR · <span id="bedroomLegendLabel">2 BR</span></div>
+      <div id="legendGradient" class="legend-gradient"></div>
+      <div class="legend-labels">
+        <span id="legendMin"></span>
+        <span id="legendMax"></span>
+      </div>
+      <div class="legend-note">click a county to explore</div>
+    </div>
+
+    <!-- Detail panel -->
+    <aside id="detailPanel" class="detail-panel hidden">
+      <button id="closePanel" class="close-btn" aria-label="Close">✕</button>
+
+      <div class="panel-area-name">
+        <span class="panel-eyebrow">FMR AREA</span>
+        <h2 id="areaName" class="panel-title"></h2>
+        <span id="areaState" class="panel-state"></span>
+      </div>
+
+      <div class="year-tabs">
+        <button class="year-tab active" data-tab="current">
+          <span class="tab-year" id="currentYearLabel">FY 2025</span>
+          <span class="tab-desc">Current</span>
+        </button>
+        <button class="year-tab" data-tab="previous">
+          <span class="tab-year" id="prevYearLabel">FY 2024</span>
+          <span class="tab-desc">Previous</span>
+        </button>
+        <button class="year-tab" data-tab="change">
+          <span class="tab-year">Δ Change</span>
+          <span class="tab-desc">YoY</span>
+        </button>
+      </div>
+
+      <div id="fmrContent" class="fmr-content"></div>
+
+      <div class="panel-meta">
+        <p id="metroStatus" class="meta-line"></p>
+        <p class="meta-line source-note">
+          Source: <a href="https://www.huduser.gov/portal/datasets/fmr.html" target="_blank" rel="noopener">HUD USER Fair Market Rents</a>
+        </p>
+      </div>
+    </aside>
+
+  </div><!-- /app-body -->
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/app.js" type="module"></script>
+</body>
+</html>
