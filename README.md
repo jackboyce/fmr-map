@@ -2,7 +2,7 @@
 
 An interactive choropleth map for exploring **HUD Fair Market Rents** across the United States — built for housing researchers, voucher administrators, landlords, and anyone who needs to understand the geographic distribution of Section 8 rent limits.
 
-![Dark choropleth map showing Massachusetts county rent levels](https://img.shields.io/badge/status-active-brightgreen) ![Node.js](https://img.shields.io/badge/node-20%2B-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
+![Status](https://img.shields.io/badge/status-active-brightgreen) ![Node.js](https://img.shields.io/badge/node-20%2B-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ---
 
@@ -36,16 +36,31 @@ FMR Map pulls live FMR data from the HUD USER REST API and visualizes it on an i
 - The currently selected state has a teal accent border
 
 **County detail panel**
-- Click any county to open a side panel showing FMRs for all five bedroom sizes: Studio, 1 BR, 2 BR, 3 BR, 4 BR
+- Click any county to open a side panel showing FMRs for all five bedroom sizes: Studio, 1 BR, 2 BR, 3 BR, and 4 BR
 - Three tabs: **Current year**, **Previous year**, and **Year-over-Year change** with dollar and percentage deltas
 - Color-coded amounts (green = low, amber = mid, orange/red = high)
+
+**Year-over-Year Trends panel**
+- Toggle the **YOY Trends** panel from the header to see every area in the state ranked by rent change percentage
+- Summary bar shows state average change, count of areas up vs down
+- Increases and decreases are split into separate sections with rank badges
+- Click any row to fly the map to that county and open the detail panel
 
 **Bedroom and year selectors**
 - Switch the choropleth between bedroom sizes (Studio through 4 BR) — the map re-colors instantly
 - Switch fiscal years (FY 2017–present) — the entire dataset reloads for the selected year
 
-**Hover tooltips**
-- Hovering any county shows a floating tooltip with the area name and current rent for the selected bedroom size
+**Light / dark mode**
+- Toggle between dark (default) and light CartoDB basemaps from the header
+- Preference is persisted to `localStorage` and defaults to the OS `prefers-color-scheme` setting
+
+**Splash screen / About**
+- First-time visitors see an explanatory splash screen covering what FMRs are and how to use the app
+- The `?` button in the header reopens it at any time
+
+**Session memory**
+- The last selected state is stored in `localStorage` and restored on return visits
+- Fresh visits start on a full US view with state outlines visible and clickable
 
 ---
 
@@ -58,7 +73,7 @@ FMR Map pulls live FMR data from the HUD USER REST API and visualizes it on an i
 | Server-side cache | In-memory Map with 24-hour TTL |
 | Frontend | Vanilla JavaScript (ES modules) |
 | Map engine | [Leaflet.js](https://leafletjs.com/) 1.9 |
-| Map tiles | CartoDB Dark Matter (no labels + labels overlay) |
+| Map tiles | CartoDB Dark Matter / Positron (light mode) |
 | County polygons | Census Bureau TIGER/Line GeoJSON (52 files) |
 | State outlines | Natural Earth simplified GeoJSON |
 | Fonts | DM Serif Display, DM Mono, Inter (Google Fonts) |
@@ -75,7 +90,7 @@ fmr-map/
 ├── public/
 │   ├── index.html          # Single-page app shell
 │   ├── css/
-│   │   └── style.css       # Dark editorial UI theme
+│   │   └── style.css       # Dark/light editorial UI theme
 │   ├── js/
 │   │   └── app.js          # All frontend logic — map, data pipeline, UI
 │   └── data/
@@ -103,6 +118,20 @@ fmr-map/
 5. **County click** → if FMR data for the clicked entity is already cached from step 3, it renders instantly; otherwise a per-entity fallback fetch is made to `/api/fmr/{entityId}`
 
 The Express server acts as a proxy so the HUD API token never reaches the browser. All HUD responses are cached in-memory for 24 hours — after the first load of a state the data is served instantly with no external requests.
+
+---
+
+## GeoJSON Data Notes
+
+The county boundary files in `public/data/counties/` have been updated to reflect current Census Bureau designations:
+
+| Old name | New name | FIPS | Year changed |
+|---|---|---|---|
+| Wade Hampton Census Area, AK | Kusilvak Census Area | 02158 (was 02270) | 2015 |
+| Shannon County, SD | Oglala Lakota County | 46102 (was 46113) | 2015 |
+| Valdez-Cordova Census Area, AK | Split into Chugach (02063) + Copper River (02066) | — | 2019 |
+
+Alaska's Aleutians West Census Area (02016) crosses the antimeridian; its bounding box is excluded from the map's auto-zoom calculation so Alaska loads at a sensible zoom level.
 
 ---
 
@@ -186,8 +215,6 @@ The `.env` file is excluded from git and never baked into the Docker image. It i
 
 ## API Routes
 
-All routes are served by the Express backend.
-
 | Route | Description |
 |---|---|
 | `GET /api/state-fips` | Static state abbreviation → FIPS lookup table |
@@ -196,8 +223,16 @@ All routes are served by the Express backend.
 | `GET /api/fmr-state/:stateCode?year=` | Full FMR dataset for a state (metro areas + counties) |
 | `GET /api/fmr/:entityId?year=` | FMR data for a single entity (fallback) |
 | `GET /api/years` | Available fiscal years (2017–present) |
-| `GET /data/counties/:fips.json` | County boundary GeoJSON (static, served from `public/`) |
+| `GET /data/counties/:fips.json` | County boundary GeoJSON (static) |
 | `GET /data/states.json` | US state boundary GeoJSON (static) |
+
+---
+
+## Planned Features
+
+- **Small Area FMR (SAFMR) support** — HUD has implemented Small Area FMRs in certain metropolitan areas (including Massachusetts and Connecticut), setting voucher payment standards at the ZIP code level rather than the broader metro area level. A future update will detect when a state uses SAFMR and display ZIP-code-level rent data instead of county-level FMRs for those areas.
+- Nginx + TLS production deployment guide (see DEPLOY.md)
+- Auto-renewal cron for Let's Encrypt certificates
 
 ---
 
@@ -211,4 +246,4 @@ All routes are served by the Express backend.
 
 ## License
 
-MIT
+MIT — Built by [Jack Boyce](https://github.com/jackboyce/fmr-map)

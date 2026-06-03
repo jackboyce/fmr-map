@@ -60,6 +60,16 @@ const elMapLegend     = document.getElementById('mapLegend');
 const elLegendMin     = document.getElementById('legendMin');
 const elLegendMax     = document.getElementById('legendMax');
 const elLoadingOverlay= document.getElementById('loadingOverlay');
+const elSplashScreen  = document.getElementById('splashScreen');
+const elSplashClose   = document.getElementById('splashClose');
+const elAboutBtn      = document.getElementById('aboutBtn');
+const elSplashBackdrop= document.querySelector('.splash-backdrop');
+const elTrendsPanel   = document.getElementById('trendsPanel');
+const elTrendsToggle  = document.getElementById('trendsToggle');
+const elCloseTrends   = document.getElementById('closeTrends');
+const elTrendsList    = document.getElementById('trendsList');
+const elTrendsSummary = document.getElementById('trendsSummary');
+const elTrendsSubtitle= document.getElementById('trendsSubtitle');
 
 // ── Map init ─────────────────────────────────────────
 const map = L.map('map', {
@@ -69,24 +79,36 @@ const map = L.map('map', {
   attributionControl: true,
 });
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
-  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
-  subdomains: 'abcd', maxZoom: 19,
-}).addTo(map);
+map.attributionControl.setPrefix(
+  '<a href="https://github.com/jackboyce/fmr-map" target="_blank" rel="noopener">Jack Boyce</a> | <a href="https://leafletjs.com" title="A JavaScript library for interactive maps">Leaflet</a>'
+);
+
+const TILES = {
+  dark: {
+    base:   'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
+    labels: 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',
+  },
+  light: {
+    base:   'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+    labels: 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',
+  },
+};
+const CARTO_ATTR = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>';
+
+let tileBase   = L.tileLayer(TILES.dark.base,   { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 19 }).addTo(map);
 
 // Labels on top pane
 const labelPane = map.createPane('labels');
 labelPane.style.zIndex = 450;
 labelPane.style.pointerEvents = 'none';
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
-  attribution: '', subdomains: 'abcd', maxZoom: 19, pane: 'labels',
-}).addTo(map);
+let tileLabels = L.tileLayer(TILES.dark.labels, { attribution: '', subdomains: 'abcd', maxZoom: 19, pane: 'labels' }).addTo(map);
 
 // ── Helpers ──────────────────────────────────────────
-const fmt = n => (n == null || n === 0) ? 'N/A' : '$' + Math.round(n).toLocaleString();
+const fmt    = n => (n == null || n === 0) ? 'N/A' : '$' + Math.round(n).toLocaleString();
+const isLight = () => document.documentElement.dataset.theme === 'light';
 
 function getRentColor(amount) {
-  if (!amount) return '#0d1b2a';
+  if (!amount) return isLight() ? '#d0d5e4' : '#0d1b2a';
   for (let i = 1; i < COLOR_STOPS.length; i++) {
     const [v0, c0] = COLOR_STOPS[i - 1];
     const [v1, c1] = COLOR_STOPS[i];
@@ -183,9 +205,12 @@ async function init() {
       o.value = s.state_code; o.textContent = s.state_name;
       elStateSelect.appendChild(o);
     }
-    // Pre-select MA
-    const ma = [...elStateSelect.options].find(o => o.value === 'MA');
-    if (ma) { ma.selected = true; loadState('MA'); }
+    // Restore last visited state, otherwise leave the map on the full US view
+    const lastState = localStorage.getItem('fmrmap_last_state');
+    if (lastState) {
+      const opt = [...elStateSelect.options].find(o => o.value === lastState);
+      if (opt) { opt.selected = true; loadState(lastState); }
+    }
   } catch (e) {
     loadStaticStates();
   }
@@ -214,7 +239,7 @@ function stateStyle(feature) {
   return {
     fillColor:   '#4fd1c5',
     fillOpacity: isSelected ? 0.04 : 0.01, // near-zero but non-zero so SVG hit-testing works
-    color:       isSelected ? '#4fd1c5' : '#2e3d5a',
+    color:       isSelected ? '#4fd1c5' : (isLight() ? '#9aa5c0' : '#2e3d5a'),
     weight:      isSelected ? 2 : 1,
     opacity:     1,
   };
@@ -335,7 +360,9 @@ async function loadState(stateCode) {
     // Render the choropleth
     renderPolygons(geojson);
     refreshStatesLayer();
+    buildTrendsList();
     hideOverlay();
+    localStorage.setItem('fmrmap_last_state', stateCode);
 
   } catch (e) {
     hideOverlay();
@@ -377,6 +404,24 @@ function getRentForArea(area) {
 }
 
 // ── Render polygons ───────────────────────────────────
+
+// Leaflet's getBounds() on a GeoJSON layer that contains antimeridian-crossing
+// polygons (e.g. Aleutians West in Alaska, lon -179° to +179°) returns a
+// near-globe-wide bounding box and causes the map to zoom all the way out.
+// Fix: collect each sub-layer's bounds individually and skip any whose
+// east-west span exceeds 200° (a reliable indicator of antimeridian wrap).
+function safeBounds(geojsonLayer) {
+  let bounds = null;
+  geojsonLayer.eachLayer(l => {
+    try {
+      const b = l.getBounds();
+      if (b.getEast() - b.getWest() > 200) return; // skip antimeridian-crossing polygon
+      bounds = bounds ? bounds.extend(b) : L.latLngBounds(b.getSouthWest(), b.getNorthEast());
+    } catch (_) {}
+  });
+  return bounds || geojsonLayer.getBounds(); // fallback if all polys were skipped
+}
+
 function renderPolygons(geojson) {
   if (appState.geojsonLayer) { map.removeLayer(appState.geojsonLayer); appState.geojsonLayer = null; }
   appState.polygonsByFips.clear();
@@ -419,7 +464,7 @@ function renderPolygons(geojson) {
   appState.geojsonLayer = layer.addTo(map);
   appState.mapAnimating = true;
   map.once('moveend', () => { appState.mapAnimating = false; });
-  map.fitBounds(layer.getBounds().pad(0.05));
+  map.fitBounds(safeBounds(layer).pad(0.05));
 }
 
 function styleFeature(feature) {
@@ -430,7 +475,7 @@ function styleFeature(feature) {
   return {
     fillColor:   getRentColor(rent),
     fillOpacity: rent ? 0.78 : 0.15,
-    color:       isSelected ? '#4fd1c5' : '#0d1b2a',
+    color:       isSelected ? '#4fd1c5' : (isLight() ? '#9aa5c0' : '#0d1b2a'),
     weight:      isSelected ? 2.5 : 0.6,
     opacity:     1,
   };
@@ -502,7 +547,14 @@ async function selectArea(area, fips) {
   elAreaState.textContent  = stateLabel;
   elCurrentYearLbl.textContent = `FY ${appState.currentYear}`;
   elPrevYearLbl.textContent    = `FY ${appState.previousYear}`;
+  // On mobile, close trends panel when county detail opens
+  if (isMobile()) {
+    elTrendsPanel.classList.add('hidden');
+    elTrendsToggle.classList.remove('active');
+    document.querySelector('.app-body').classList.remove('trends-open');
+  }
   elDetailPanel.classList.remove('hidden');
+  syncPanelOpenClass();
   showPanelLoading();
 
   const [curr, prev] = await Promise.all([
@@ -515,19 +567,18 @@ async function selectArea(area, fips) {
     : 'Non-metropolitan county';
 
   renderPanel(curr, prev);
+  refreshTrendsSelection();
 }
 
 function highlightAreaPolygons(area, clickedFips) {
-  // For metros: color all constituent county polygons
+  // Style all constituent polygons for the selected area.
+  // No bringToFront — letting adjacent polygons render on top prevents
+  // the selection border from visually bleeding onto their fills.
+  const clickedId = area.fips_code || area.cbsacode || area.entity_id;
   for (const [fips, a] of appState.areaByFips) {
-    const id = a.fips_code || a.cbsacode || a.entity_id;
-    const clickedId = area.fips_code || area.cbsacode || area.entity_id;
-    if (id === clickedId) {
+    if ((a.fips_code || a.cbsacode || a.entity_id) === clickedId) {
       const poly = appState.polygonsByFips.get(fips);
-      if (poly) {
-        poly.setStyle({ weight: 2.5, color: '#4fd1c5', fillOpacity: 0.88 });
-        poly.bringToFront();
-      }
+      if (poly) poly.setStyle({ weight: 2.5, color: '#4fd1c5', fillOpacity: 0.88 });
     }
   }
 }
@@ -602,6 +653,181 @@ function renderChangeTable(curr, prev) {
     </div>`;
 }
 
+// ── Trends panel ─────────────────────────────────────
+function isMobile() { return window.innerWidth <= 720; }
+
+function toggleTrendsPanel(forceOpen) {
+  const open = forceOpen !== undefined ? forceOpen : elTrendsPanel.classList.contains('hidden');
+  // On mobile, trends and detail panels are mutually exclusive
+  if (open && isMobile()) {
+    elDetailPanel.classList.add('hidden');
+  }
+  elTrendsPanel.classList.toggle('hidden', !open);
+  elTrendsToggle.classList.toggle('active', open);
+  const appBody = document.querySelector('.app-body');
+  appBody.classList.toggle('trends-open', open);
+  syncPanelOpenClass();
+}
+
+function syncPanelOpenClass() {
+  const anyOpen = !elDetailPanel.classList.contains('hidden') ||
+                  !elTrendsPanel.classList.contains('hidden');
+  document.querySelector('.app-body').classList.toggle('panel-open', anyOpen);
+}
+
+function buildTrendsList() {
+  if (elTrendsPanel.classList.contains('hidden')) return; // don't build if not visible
+
+  const br   = appState.selectedBedroom;
+  const curY = appState.currentYear;
+  const preY = appState.previousYear;
+
+  // Update subtitle
+  const stateLabel = appState.selectedStateCode || '—';
+  elTrendsSubtitle.textContent =
+    `FY ${preY} → FY ${curY}  ·  ${stateLabel}  ·  ${BEDROOM_LABELS[br].short}`;
+
+  if (!appState.selectedStateCode || appState.areaByFips.size === 0) {
+    elTrendsList.innerHTML = '<div class="trends-empty">Select a state to see year-over-year rent change rankings.</div>';
+    elTrendsSummary.classList.add('hidden');
+    return;
+  }
+
+  // Collect unique areas (deduplicate metros that span multiple counties)
+  const seen = new Set();
+  const rows = [];
+
+  for (const [fips, area] of appState.areaByFips) {
+    const id = area.fips_code || area.cbsacode || area.entity_id;
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+
+    const currEntry = appState.fmrData.get(fmrKey(id, curY));
+    const prevEntry = appState.fmrData.get(fmrKey(id, preY));
+    const cv = extractRent(currEntry, br);
+    const pv = extractRent(prevEntry, br);
+
+    if (cv == null || pv == null || pv === 0) continue;
+
+    const diff = cv - pv;
+    const pct  = (diff / pv) * 100;
+    const name = area.area_name || area.county_name || area.town_name || 'Unknown';
+
+    rows.push({ fips, area, id, name, cv, pv, diff, pct });
+  }
+
+  if (rows.length === 0) {
+    elTrendsList.innerHTML = '<div class="trends-empty">No year-over-year data available for this state and year combination.</div>';
+    elTrendsSummary.classList.add('hidden');
+    return;
+  }
+
+  // Sort highest increase first
+  rows.sort((a, b) => b.pct - a.pct);
+
+  // Summary stats
+  const avgPct   = rows.reduce((s, r) => s + r.pct, 0) / rows.length;
+  const maxRow   = rows[0];
+  const minRow   = rows[rows.length - 1];
+  const numUp    = rows.filter(r => r.diff > 0).length;
+  const numDown  = rows.filter(r => r.diff < 0).length;
+
+  elTrendsSummary.classList.remove('hidden');
+  elTrendsSummary.innerHTML = `
+    <div class="trend-stat">
+      <span class="trend-stat-label">State Avg</span>
+      <span class="trend-stat-value ${avgPct > 0 ? 'is-up' : avgPct < 0 ? 'is-down' : 'is-flat'}">
+        ${avgPct > 0 ? '▲' : avgPct < 0 ? '▼' : '—'} ${Math.abs(avgPct).toFixed(1)}%
+      </span>
+    </div>
+    <div class="trend-stat">
+      <span class="trend-stat-label">Areas Up</span>
+      <span class="trend-stat-value is-up">${numUp}</span>
+    </div>
+    <div class="trend-stat">
+      <span class="trend-stat-label">Areas Down</span>
+      <span class="trend-stat-value is-down">${numDown}</span>
+    </div>
+    <div class="trend-stat">
+      <span class="trend-stat-label">Total Areas</span>
+      <span class="trend-stat-value">${rows.length}</span>
+    </div>`;
+
+  // Build list HTML
+  const increases = rows.filter(r => r.diff > 0);
+  const flat      = rows.filter(r => r.diff === 0);
+  const decreases = rows.filter(r => r.diff < 0);
+
+  let html = '';
+  let incRank = 1;
+
+  if (increases.length) {
+    html += `<div class="trends-section-label">▲ Increases (${increases.length})</div>`;
+    for (const r of increases) {
+      html += trendRowHTML(r, incRank++);
+    }
+  }
+  if (flat.length) {
+    html += `<div class="trends-section-label">— No Change (${flat.length})</div>`;
+    for (const r of flat) html += trendRowHTML(r, null);
+  }
+  if (decreases.length) {
+    // decreases are already at the end of sorted array, reverse for "least decrease" first
+    html += `<div class="trends-section-label">▼ Decreases (${decreases.length})</div>`;
+    for (const r of decreases) html += trendRowHTML(r, null);
+  }
+
+  elTrendsList.innerHTML = html;
+
+  // Attach click handlers
+  elTrendsList.querySelectorAll('.trend-row').forEach(el => {
+    el.addEventListener('click', () => {
+      const fips = el.dataset.fips;
+      const area = appState.areaByFips.get(fips);
+      if (area) {
+        // Open the detail panel first so the map resizes to its final dimensions,
+        // then fly — otherwise flyToBounds targets the pre-resize centre.
+        selectArea(area, fips);
+        const poly = appState.polygonsByFips.get(fips);
+        if (poly) {
+          setTimeout(() => {
+            map.invalidateSize({ animate: false });
+            map.flyToBounds(poly.getBounds().pad(0.3), { duration: 0.6 });
+          }, 30);
+        }
+      }
+    });
+  });
+
+  // Highlight selected row if any
+  refreshTrendsSelection();
+}
+
+function trendRowHTML(r, rank) {
+  const cls  = r.diff > 0 ? 'is-up' : r.diff < 0 ? 'is-down' : 'is-flat';
+  const arrow= r.diff > 0 ? '▲' : r.diff < 0 ? '▼' : '—';
+  const pct  = Math.abs(r.pct).toFixed(1) + '%';
+  const dol  = (r.diff > 0 ? '+' : '') + fmt(r.diff);
+  const rankStr = rank != null ? `#${rank}` : '';
+  return `<div class="trend-row" data-fips="${r.fips}">
+    <span class="trend-rank">${rankStr}</span>
+    <div class="trend-info">
+      <div class="trend-name">${r.name}</div>
+      <div class="trend-rents">${fmt(r.pv)} → ${fmt(r.cv)}</div>
+    </div>
+    <div class="trend-change ${cls}">
+      <span class="trend-pct">${arrow} ${pct}</span>
+      <span class="trend-dollar">${dol}</span>
+    </div>
+  </div>`;
+}
+
+function refreshTrendsSelection() {
+  elTrendsList.querySelectorAll('.trend-row').forEach(el => {
+    el.classList.toggle('selected', el.dataset.fips === appState.selectedAreaId);
+  });
+}
+
 // ── Event listeners ───────────────────────────────────
 elStateSelect.addEventListener('change', e => loadState(e.target.value));
 
@@ -617,6 +843,7 @@ elYearSelect.addEventListener('change', e => {
 elBedroomSelect.addEventListener('change', e => {
   appState.selectedBedroom = e.target.value;
   refreshPolygonStyles();
+  buildTrendsList();
   if (appState.selectedAreaId) {
     const area = appState.areaByFips.get(appState.selectedAreaId);
     if (area) {
@@ -628,11 +855,30 @@ elBedroomSelect.addEventListener('change', e => {
   }
 });
 
+elTrendsToggle.addEventListener('click', () => {
+  toggleTrendsPanel();
+  buildTrendsList();
+});
+
+elCloseTrends.addEventListener('click', () => {
+  toggleTrendsPanel(false);
+  requestAnimationFrame(() => {
+    // Counteract Leaflet's re-centring pan: the map grows leftward by the
+    // panel width, so pan right by half that amount to keep the view stable.
+    const TRENDS_W = window.innerWidth <= 720 ? 0 : 320;
+    map.invalidateSize({ animate: false, pan: false });
+    if (TRENDS_W > 0) map.panBy([-TRENDS_W / 2, 0], { animate: false });
+  });
+});
+
 elClosePanel.addEventListener('click', () => {
   elDetailPanel.classList.add('hidden');
+  syncPanelOpenClass();
+  setTimeout(() => map.invalidateSize({ animate: false }), 30);
   if (appState.selectedAreaId) {
-    deselectMetroPolygons(appState.selectedAreaId);
-    appState.selectedAreaId = null;
+    const prev = appState.selectedAreaId;
+    appState.selectedAreaId = null;   // clear first so styleFeature returns unselected style
+    deselectMetroPolygons(prev);
   }
 });
 
@@ -652,6 +898,53 @@ document.querySelectorAll('.year-tab').forEach(tab => {
     }
   });
 });
+
+// ── Theme ──────────────────────────────────────────────
+const elThemeToggle = document.getElementById('themeToggle');
+
+function applyTheme(theme, save = true) {
+  document.documentElement.dataset.theme = theme;
+  elThemeToggle.textContent = theme === 'light' ? '🌙' : '☀';
+  elThemeToggle.title = theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+
+  // Swap map tile layers
+  const urls = TILES[theme];
+  tileBase.setUrl(urls.base);
+  tileLabels.setUrl(urls.labels);
+
+  // Refresh polygon strokes so they match the new background
+  if (appState.geojsonLayer) refreshPolygonStyles();
+  if (appState.statesLayer)  refreshStatesLayer();
+
+  if (save) localStorage.setItem('fmrmap_theme', theme);
+}
+
+elThemeToggle.addEventListener('click', () => {
+  applyTheme(isLight() ? 'dark' : 'light');
+});
+
+// Apply saved or system preference on load
+const savedTheme = localStorage.getItem('fmrmap_theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'), false);
+
+// ── Splash screen ─────────────────────────────────────
+function showSplash() { elSplashScreen.classList.remove('hidden'); }
+function hideSplash() {
+  elSplashScreen.classList.add('hidden');
+  localStorage.setItem('fmrmap_seen', '1');
+}
+
+elSplashClose.addEventListener('click', hideSplash);
+elSplashBackdrop.addEventListener('click', hideSplash);
+elAboutBtn.addEventListener('click', showSplash);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !elSplashScreen.classList.contains('hidden')) hideSplash();
+});
+
+// Show on first visit; skip on return visits
+if (!localStorage.getItem('fmrmap_seen')) showSplash();
+else elSplashScreen.classList.add('hidden');
 
 // ── Go ────────────────────────────────────────────────
 init();
