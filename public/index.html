@@ -41,10 +41,104 @@
           <option value="four_br">4 BR</option>
         </select>
       </div>
+      <button id="trendsToggle" class="trends-toggle-btn" title="Year-over-year rent change analysis">
+        <span class="trends-btn-icon">&#x25B2;&#x25BC;</span>
+        <span class="trends-btn-label">YOY TRENDS</span>
+      </button>
+      <button id="themeToggle" class="theme-toggle-btn" title="Toggle light / dark mode" aria-label="Toggle light/dark mode">☀</button>
+      <button id="aboutBtn" class="about-btn" title="About this project">?</button>
     </div>
   </header>
 
+  <!-- Splash / About overlay -->
+  <div id="splashScreen" class="splash-overlay" role="dialog" aria-modal="true" aria-label="About FMR Map">
+    <div class="splash-backdrop"></div>
+    <div class="splash-card">
+
+      <div class="splash-header">
+        <span class="splash-eyebrow">HUD DATA EXPLORER</span>
+        <h1 class="splash-title">Fair Market Rents</h1>
+        <p class="splash-tagline">
+          Interactive maps of HUD Fair Market Rents — the federal rent benchmarks
+          that set Section&nbsp;8 housing voucher limits across every county in America.
+        </p>
+      </div>
+
+      <div class="splash-what">
+        <h2 class="splash-section-title">What are Fair Market Rents?</h2>
+        <p class="splash-body">
+          Every October, the U.S. Department of Housing and Urban Development publishes
+          Fair Market Rents (FMRs) — estimates of the <strong>40th&nbsp;percentile gross rent</strong>
+          for standard-quality units in each market area. These figures determine the
+          maximum rent HUD will subsidize under Section&nbsp;8 vouchers, and are used widely
+          in housing research and policy.
+        </p>
+      </div>
+
+      <div class="splash-features">
+
+        <div class="splash-feature">
+          <span class="splash-feat-icon">🗺</span>
+          <div>
+            <strong>Click any state</strong>
+            <p>Select from the dropdown <em>or</em> click any state directly on the map. Counties fill with a colour gradient — dark blue for low rents, red for high.</p>
+          </div>
+        </div>
+
+        <div class="splash-feature">
+          <span class="splash-feat-icon">🏘</span>
+          <div>
+            <strong>Explore any county</strong>
+            <p>Click a county to open the detail panel — FMR broken down for Studio, 1&nbsp;BR, 2&nbsp;BR, 3&nbsp;BR, and 4&nbsp;BR, plus year-over-year change.</p>
+          </div>
+        </div>
+
+        <div class="splash-feature">
+          <span class="splash-feat-icon">↑↓</span>
+          <div>
+            <strong>YOY Trends panel</strong>
+            <p>Press <em>YOY Trends</em> in the header to rank every area in the state by rent-change percentage — instantly see where rents are rising fastest or falling.</p>
+          </div>
+        </div>
+
+        <div class="splash-feature">
+          <span class="splash-feat-icon">🛏</span>
+          <div>
+            <strong>Bedroom &amp; year selectors</strong>
+            <p>Switch bedroom size (Studio → 4&nbsp;BR) or fiscal year (back to FY&nbsp;2017) to recolour the entire map and recalculate all trends instantly.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="splash-footer">
+        <p class="splash-credit">
+          Built by <a href="https://github.com/jackboyce/fmr-map" target="_blank" rel="noopener">Jack Boyce</a>
+          &nbsp;·&nbsp; Data: <a href="https://www.huduser.gov/hudapi/public" target="_blank" rel="noopener">HUD USER API</a>
+        </p>
+        <button id="splashClose" class="splash-cta">Start Exploring →</button>
+      </div>
+
+    </div>
+  </div>
+
   <div class="app-body">
+
+    <!-- Trends panel (left) -->
+    <aside id="trendsPanel" class="trends-panel hidden">
+      <div class="trends-panel-header">
+        <div>
+          <span class="panel-eyebrow">YOY ANALYSIS</span>
+          <h2 class="trends-panel-title">Rent Change Rankings</h2>
+          <p id="trendsSubtitle" class="trends-subtitle"></p>
+        </div>
+        <button id="closeTrends" class="close-btn" aria-label="Close">✕</button>
+      </div>
+      <div id="trendsSummary" class="trends-summary hidden"></div>
+      <div id="trendsList" class="trends-list">
+        <div class="trends-empty">Select a state to see year-over-year rent change rankings.</div>
+      </div>
+    </aside>
 
     <!-- Map -->
     <div id="map"></div>

@@ -13,5 +13,8 @@ Thumbs.db
 # Claude Code session files
 .claude/
 
+# Session handoff docs (local only)
+HANDOFF.md
+
 # Build artifacts
 npm-debug.log*
