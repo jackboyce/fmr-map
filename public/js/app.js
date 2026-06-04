@@ -899,6 +899,7 @@ elClosePanel.addEventListener('click', () => {
   if (isMobile() && appState.trendsWasOpen) {
     appState.trendsWasOpen = false;
     toggleTrendsPanel(true);
+    buildTrendsList();
     setTimeout(() => {
       map.invalidateSize({ animate: false });
       if (appState.geojsonLayer) map.fitBounds(safeBounds(appState.geojsonLayer).pad(0.05));
