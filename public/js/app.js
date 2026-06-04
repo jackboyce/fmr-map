@@ -659,8 +659,8 @@ function renderChangeTable(curr, prev) {
 }
 
 // ── Trends panel ─────────────────────────────────────
-function isMobile() { return window.innerWidth <= 720; }
-function isNarrow() { return window.innerWidth <= 960; }
+function isMobile() { return window.innerWidth <= 1100; }
+function isNarrow() { return window.innerWidth <= 1100; }
 
 function toggleTrendsPanel(forceOpen) {
   const open = forceOpen !== undefined ? forceOpen : elTrendsPanel.classList.contains('hidden');
@@ -888,7 +888,7 @@ elCloseTrends.addEventListener('click', () => {
   setTimeout(() => {
     // Counteract Leaflet's re-centring pan: the map grows leftward by the
     // panel width, so pan right by half that amount to keep the view stable.
-    const TRENDS_W = window.innerWidth <= 720 ? 0 : 320;
+    const TRENDS_W = window.innerWidth <= 1100 ? 0 : 320;
     map.invalidateSize({ animate: false, pan: false });
     if (TRENDS_W > 0) map.panBy([-TRENDS_W / 2, 0], { animate: false });
   }, 250);
