@@ -63,13 +63,16 @@
 [data-theme="light"] .leaflet-control-zoom a:hover { background: var(--surface2) !important; }
 
 html, body { height:100%; background:var(--bg); color:var(--text); font-family:var(--font-sans); font-size:14px; overflow:hidden; }
+body { display:flex; flex-direction:column; }
 
 /* ── Header ──────────────────────────────────────── */
 .site-header {
-  position:fixed; top:0; left:0; right:0; height:var(--header-h);
+  flex-shrink:0;
   background:var(--surface); border-bottom:1px solid var(--border);
   display:flex; align-items:center; justify-content:space-between;
   padding:0 20px; z-index:1000; gap:16px;
+  /* height kept to avoid layout shift on desktop */
+  height:var(--header-h);
 }
 .header-left { display:flex; align-items:baseline; gap:12px; flex-shrink:0; }
 .header-eyebrow {
@@ -226,7 +229,7 @@ html, body { height:100%; background:var(--bg); color:var(--text); font-family:v
 .trends-btn-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; }
 
 /* ── App body ────────────────────────────────────── */
-.app-body { position:fixed; top:var(--header-h); left:0; right:0; bottom:0; display:flex; }
+.app-body { flex:1; min-height:0; position:relative; display:flex; }
 
 /* ── Map ─────────────────────────────────────────── */
 #map { flex:1; height:100%; background:#060a10; }
@@ -524,50 +527,61 @@ html, body { height:100%; background:var(--bg); color:var(--text); font-family:v
 }
 
 @media (max-width:720px) {
-  :root { --panel-w: 100%; --trends-w: 100%; --header-h: 104px; }
+  :root { --panel-w: 100%; --trends-w: 100%; }
 
   /* Header: two-row layout — title on top, controls below */
   .site-header {
     flex-direction: column; align-items: stretch;
-    height: auto; min-height: var(--header-h);
+    height: auto;
     padding: 10px 14px 8px; gap: 8px;
   }
   .header-left { gap: 8px; }
   .header-title { font-size: 17px; }
+  /* Hide labels to keep the controls row compact */
+  .control-label { display: none; }
   .header-controls {
     gap: 8px; flex-wrap: nowrap;
     overflow-x: auto; -webkit-overflow-scrolling: touch;
-    padding-bottom: 2px;        /* room for scrollbar if it shows */
-    scrollbar-width: none;      /* hide scrollbar on Firefox */
+    padding-bottom: 2px;
+    scrollbar-width: none;
   }
   .header-controls::-webkit-scrollbar { display: none; }
   .select-control { font-size: 12px; flex-shrink: 0; }
   .trends-btn-label { display: none; }
   .trends-toggle-btn { flex-shrink: 0; }
 
-  /* Map fills remaining space, panels stack below */
+  /* Map fills remaining space; trends and detail stack BELOW the map */
   .app-body { flex-direction: column; }
-  #map { flex: 1; min-height: 0; }
+  #map { flex: 1; min-height: 0; order: 1; }
+  .trends-panel { order: 2; }
+  .detail-panel { order: 3; }
 
-  /* When a panel is open, shrink map and show panel below */
-  .app-body.panel-open #map { flex: none; height: 48vh; }
+  /* When a panel is open, map takes 52% of app-body, panel takes 48% */
+  .app-body.panel-open #map { flex: none; height: 52%; }
 
   .detail-panel {
-    width: 100%; height: 48vh; flex-shrink: 0;
+    width: 100%; height: 48%; flex-shrink: 0;
     border-left: none; border-top: 1px solid var(--border);
     animation: slideUp .2s ease;
   }
   .trends-panel {
-    width: 100%; height: 48vh; flex-shrink: 0;
+    width: 100%; height: 48%; flex-shrink: 0;
     border-right: none; border-top: 1px solid var(--border);
     animation: slideUp .2s ease;
   }
   @keyframes slideUp { from { transform:translateY(20px); opacity:0; } to { transform:translateY(0); opacity:1; } }
 
-  /* Legend stays in bottom-left of the map area; reset desktop left-shift */
-  .map-legend { bottom: auto; top: calc(48vh - 90px); left: 10px !important; }
-  .app-body:not(.panel-open) .map-legend { top: auto; bottom: 44px; }
+  /* Legend: 96px above the bottom of the map area */
+  .map-legend { bottom: auto; top: calc(52% - 96px); left: 10px !important; }
+  .app-body:not(.panel-open) .map-legend { top: auto; bottom: 32px; }
 
   .map-message { bottom: 44px; }
   .loading-overlay { width: 100% !important; }
+}
+
+/* Larger tap targets on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .close-btn { width: 40px; height: 40px; font-size: 14px; }
+  .theme-toggle-btn, .about-btn { width: 40px; height: 40px; font-size: 16px; }
+  .select-control { padding-top: 8px; padding-bottom: 8px; }
 }
