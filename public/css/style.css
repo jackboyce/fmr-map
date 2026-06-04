@@ -70,7 +70,7 @@ body { display:flex; flex-direction:column; }
   flex-shrink:0;
   background:var(--surface); border-bottom:1px solid var(--border);
   display:flex; align-items:center; justify-content:space-between;
-  padding:0 20px; z-index:1000; gap:16px;
+  padding:0 20px; gap:16px;
   /* height kept to avoid layout shift on desktop */
   height:var(--header-h);
 }
@@ -539,16 +539,20 @@ body { display:flex; flex-direction:column; }
   .header-title { font-size: 17px; }
   /* Hide labels to keep the controls row compact */
   .control-label { display: none; }
-  .header-controls {
-    gap: 8px; flex-wrap: nowrap;
-    overflow-x: auto; -webkit-overflow-scrolling: touch;
-    padding-bottom: 2px;
-    scrollbar-width: none;
+  .header-controls { gap: 6px; flex-wrap: nowrap; }
+  .select-control { font-size: 12px; padding: 5px 22px 5px 7px; flex-shrink: 0; }
+  #stateSelect { width: 64px; }
+  .trends-toggle-btn { padding: 5px 10px; flex-shrink: 0; }
+  .trends-btn-label { font-size: 8px; letter-spacing: .08em; }
+  .theme-toggle-btn { width: 28px; height: 28px; flex-shrink: 0; }
+
+  /* ? button floats at bottom-right, behind panels */
+  .about-btn {
+    position: fixed; bottom: 46px; right: 16px;
+    width: 44px; height: 44px; font-size: 16px;
+    z-index: 450;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.45);
   }
-  .header-controls::-webkit-scrollbar { display: none; }
-  .select-control { font-size: 12px; flex-shrink: 0; }
-  .trends-btn-label { display: none; }
-  .trends-toggle-btn { flex-shrink: 0; }
 
   /* Map fills remaining space; trends and detail stack BELOW the map */
   .app-body { flex-direction: column; }
@@ -563,11 +567,13 @@ body { display:flex; flex-direction:column; }
     width: 100%; height: 48%; flex-shrink: 0;
     border-left: none; border-top: 1px solid var(--border);
     animation: slideUp .2s ease;
+    position: relative; z-index: 500;
   }
   .trends-panel {
     width: 100%; height: 48%; flex-shrink: 0;
     border-right: none; border-top: 1px solid var(--border);
     animation: slideUp .2s ease;
+    position: relative; z-index: 500;
   }
   @keyframes slideUp { from { transform:translateY(20px); opacity:0; } to { transform:translateY(0); opacity:1; } }
 
@@ -577,11 +583,14 @@ body { display:flex; flex-direction:column; }
 
   .map-message { bottom: 44px; }
   .loading-overlay { width: 100% !important; }
+
+  /* Keep Leaflet attribution pinned to viewport bottom, not map bottom */
+  .leaflet-bottom { position: fixed !important; }
 }
 
 /* Larger tap targets on touch devices */
 @media (hover: none) and (pointer: coarse) {
   .close-btn { width: 40px; height: 40px; font-size: 14px; }
-  .theme-toggle-btn, .about-btn { width: 40px; height: 40px; font-size: 16px; }
+  .theme-toggle-btn { width: 40px; height: 40px; font-size: 16px; }
   .select-control { padding-top: 8px; padding-bottom: 8px; }
 }
