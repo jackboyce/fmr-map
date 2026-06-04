@@ -41,6 +41,7 @@ const appState = {
   polygonsByFips:  new Map(),   // fips5 → L.polygon layer(s)
   areaByFips:      new Map(),   // fips5 → HUD area object
   mapAnimating:    false,       // true while fitBounds is running
+  trendsWasOpen:   false,       // mobile: restore trends panel after closing county detail
 };
 
 // ── DOM refs ─────────────────────────────────────────
@@ -175,7 +176,7 @@ async function init() {
     elYearSelect.innerHTML = '';
     for (const y of years) {
       const o = document.createElement('option');
-      o.value = y; o.textContent = `FY ${y}`;
+      o.value = y; o.textContent = isMobile() ? `${y}` : `FY ${y}`;
       if (y === appState.currentYear) o.selected = true;
       elYearSelect.appendChild(o);
     }
@@ -199,10 +200,10 @@ async function init() {
   try {
     const data  = await api('/api/states');
     const states = (data.data || data).sort((a,b) => a.state_name.localeCompare(b.state_name));
-    elStateSelect.innerHTML = '<option value="">— Select a state —</option>';
+    elStateSelect.innerHTML = `<option value="">${isMobile() ? 'State' : '— Select a state —'}</option>`;
     for (const s of states) {
       const o = document.createElement('option');
-      o.value = s.state_code; o.textContent = s.state_name;
+      o.value = s.state_code; o.textContent = isMobile() ? s.state_code : s.state_name;
       elStateSelect.appendChild(o);
     }
     // Restore last visited state, otherwise leave the map on the full US view
@@ -227,9 +228,9 @@ function loadStaticStates() {
     ['OK','Oklahoma'],['OR','Oregon'],['PA','Pennsylvania'],['RI','Rhode Island'],['SC','South Carolina'],
     ['SD','South Dakota'],['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],
     ['VA','Virginia'],['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']];
-  elStateSelect.innerHTML = '<option value="">— Select a state —</option>';
+  elStateSelect.innerHTML = `<option value="">${isMobile() ? 'State' : '— Select a state —'}</option>`;
   for (const [c,n] of S) {
-    const o = document.createElement('option'); o.value=c; o.textContent=n; elStateSelect.appendChild(o);
+    const o = document.createElement('option'); o.value=c; o.textContent=isMobile()?c:n; elStateSelect.appendChild(o);
   }
 }
 
@@ -547,8 +548,9 @@ async function selectArea(area, fips) {
   elAreaState.textContent  = stateLabel;
   elCurrentYearLbl.textContent = `FY ${appState.currentYear}`;
   elPrevYearLbl.textContent    = `FY ${appState.previousYear}`;
-  // On mobile, close trends panel when county detail opens
+  // On mobile, close trends panel when county detail opens (remember to restore on close)
   if (isMobile()) {
+    appState.trendsWasOpen = !elTrendsPanel.classList.contains('hidden');
     elTrendsPanel.classList.add('hidden');
     elTrendsToggle.classList.remove('active');
     document.querySelector('.app-body').classList.remove('trends-open');
@@ -876,6 +878,14 @@ elCloseTrends.addEventListener('click', () => {
 elClosePanel.addEventListener('click', () => {
   elDetailPanel.classList.add('hidden');
   syncPanelOpenClass();
+  if (isMobile() && appState.trendsWasOpen) {
+    appState.trendsWasOpen = false;
+    toggleTrendsPanel(true);
+    setTimeout(() => {
+      map.invalidateSize({ animate: false });
+      if (appState.geojsonLayer) map.fitBounds(safeBounds(appState.geojsonLayer).pad(0.05));
+    }, 50);
+  }
   setTimeout(() => map.invalidateSize({ animate: false }), 30);
   if (appState.selectedAreaId) {
     const prev = appState.selectedAreaId;
