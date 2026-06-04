@@ -80,7 +80,8 @@ body { display:flex; flex-direction:column; }
   color:var(--accent); text-transform:uppercase;
 }
 .header-title { font-family:var(--font-serif); font-size:21px; font-weight:400; white-space:nowrap; }
-.header-controls { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.header-controls { display:flex; gap:12px; align-items:center; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; }
+.header-controls::-webkit-scrollbar { display:none; }
 .control-group { display:flex; flex-direction:column; gap:2px; }
 .control-label { font-family:var(--font-mono); font-size:9px; letter-spacing:.12em; color:var(--text-faint); }
 .select-control {
@@ -529,6 +530,28 @@ body { display:flex; flex-direction:column; }
 /* ── Stacking layout: phones, tablets, foldables ─────── */
 @media (max-width:1100px) {
   :root { --panel-w: 100%; --trends-w: 100%; }
+
+  /* Compact controls for all stacking-layout screens */
+  .control-label { display: none; }
+  .header-controls { gap: 6px; }
+  .select-control { font-size: 12px; padding: 5px 22px 5px 7px; flex-shrink: 0; }
+  #stateSelect { width: 64px; }
+  .trends-toggle-btn { padding: 5px 10px; flex-shrink: 0; }
+  .trends-btn-label { font-size: 8px; letter-spacing: .08em; }
+  .theme-toggle-btn { width: 28px; height: 28px; flex-shrink: 0; }
+}
+
+/* Narrow phones: two-row header */
+@media (max-width:720px) {
+  .site-header {
+    flex-direction: column; align-items: stretch;
+    height: auto; padding: 10px 14px 8px; gap: 8px;
+  }
+  .header-left { gap: 8px; }
+  .header-title { font-size: 17px; }
+}
+
+@media (max-width:1100px) {
 
   /* ? button floats at bottom-right, behind panels */
   .about-btn {
