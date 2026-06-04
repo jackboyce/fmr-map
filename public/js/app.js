@@ -290,7 +290,7 @@ function refreshStatesLayer() {
 }
 
 // ── Load a state ─────────────────────────────────────
-async function loadState(stateCode) {
+async function loadState(stateCode, { skipZoom = false } = {}) {
   if (!stateCode) return;
   appState.selectedStateCode = stateCode;
   appState.polygonsByFips.clear();
@@ -359,7 +359,7 @@ async function loadState(stateCode) {
     ]);
 
     // Render the choropleth
-    renderPolygons(geojson);
+    renderPolygons(geojson, skipZoom);
     refreshStatesLayer();
     buildTrendsList();
     hideOverlay();
@@ -423,7 +423,7 @@ function safeBounds(geojsonLayer) {
   return bounds || geojsonLayer.getBounds(); // fallback if all polys were skipped
 }
 
-function renderPolygons(geojson) {
+function renderPolygons(geojson, skipZoom = false) {
   if (appState.geojsonLayer) { map.removeLayer(appState.geojsonLayer); appState.geojsonLayer = null; }
   appState.polygonsByFips.clear();
 
@@ -463,9 +463,11 @@ function renderPolygons(geojson) {
   });
 
   appState.geojsonLayer = layer.addTo(map);
-  appState.mapAnimating = true;
-  map.once('moveend', () => { appState.mapAnimating = false; });
-  map.fitBounds(safeBounds(layer).pad(0.05));
+  if (!skipZoom) {
+    appState.mapAnimating = true;
+    map.once('moveend', () => { appState.mapAnimating = false; });
+    map.fitBounds(safeBounds(layer).pad(0.05));
+  }
 }
 
 function styleFeature(feature) {
@@ -841,11 +843,13 @@ elYearSelect.addEventListener('change', async e => {
   elPrevYearLbl.textContent    = `FY ${appState.previousYear}`;
   const prevAreaId = appState.selectedAreaId;
   if (appState.selectedStateCode) {
-    await loadState(appState.selectedStateCode);
+    await loadState(appState.selectedStateCode, { skipZoom: !!prevAreaId });
     if (prevAreaId) {
       const area = appState.areaByFips.get(prevAreaId);
       if (area) {
+        const savedTrendsWasOpen = appState.trendsWasOpen;
         await selectArea(area, prevAreaId);
+        appState.trendsWasOpen = savedTrendsWasOpen;
         // Close the panel if the new year has no data for this county
         if (elFmrContent.querySelector('.error-state')) {
           elDetailPanel.classList.add('hidden');
