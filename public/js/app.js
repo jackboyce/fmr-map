@@ -24,6 +24,7 @@ const COLOR_STOPS = [
   [5000, '#9b1c2e'],
 ];
 
+// States for which HUD publishes Small Area FMR (ZIP-level) data
 // ── State ────────────────────────────────────────────
 const appState = {
   currentYear:     2025,
@@ -42,6 +43,9 @@ const appState = {
   areaByFips:      new Map(),   // fips5 → HUD area object
   mapAnimating:    false,       // true while fitBounds is running
   trendsWasOpen:   false,       // mobile: restore trends panel after closing county detail
+  safmrMode:       false,       // true = render ZIP polygons for SAFMR metros
+  safmrMetros:     [],          // metros with smallarea_status=1 for selected state
+  mrvpMode:        false,       // true = render MA MRVP payment standards (MA only)
 };
 
 // ── DOM refs ─────────────────────────────────────────
@@ -65,6 +69,7 @@ const elSplashScreen  = document.getElementById('splashScreen');
 const elSplashClose   = document.getElementById('splashClose');
 const elAboutBtn      = document.getElementById('aboutBtn');
 const elSplashBackdrop= document.querySelector('.splash-backdrop');
+const elSafmrToggle   = document.getElementById('safmrToggle');
 const elTrendsPanel   = document.getElementById('trendsPanel');
 const elTrendsToggle  = document.getElementById('trendsToggle');
 const elCloseTrends   = document.getElementById('closeTrends');
@@ -289,9 +294,44 @@ function refreshStatesLayer() {
   if (appState.geojsonLayer) appState.geojsonLayer.bringToFront();
 }
 
+// ── SAFMR button state ────────────────────────────────
+const MRVP_YEARS = new Set([2023, 2024, 2025]);
+
+function updateAltButton() {
+  const state = appState.selectedStateCode;
+  const year  = appState.currentYear;
+
+  if (state === 'MA') {
+    const canMrvp = MRVP_YEARS.has(year);
+    elSafmrToggle.textContent = 'MRVP';
+    elSafmrToggle.disabled    = !canMrvp;
+    elSafmrToggle.classList.toggle('active', canMrvp && appState.mrvpMode);
+    elSafmrToggle.title = canMrvp
+      ? (appState.mrvpMode ? 'Switch back to HUD FMR view' : 'View MRVP payment standards by ZIP')
+      : 'No MRVP data available for this year';
+  } else {
+    const canSafmr = appState.safmrMetros.length > 0;
+    elSafmrToggle.textContent = 'ZIP';
+    elSafmrToggle.disabled    = !canSafmr;
+    elSafmrToggle.classList.toggle('active', canSafmr && appState.safmrMode);
+    const n = appState.safmrMetros.length;
+    elSafmrToggle.title = canSafmr
+      ? (appState.safmrMode
+          ? 'Switch to county view'
+          : `Switch to ZIP-level Small Area FMR view (${n} metro${n > 1 ? 's' : ''})`)
+      : 'No Small Area FMR metros in this state';
+  }
+}
+// legacy alias — remove once all call sites updated
+const updateSafmrButton = updateAltButton;
+
 // ── Load a state ─────────────────────────────────────
 async function loadState(stateCode, { skipZoom = false } = {}) {
   if (!stateCode) return;
+  // MRVP is MA-only; SAFMR metro list refreshes per state
+  if (stateCode !== 'MA') appState.mrvpMode = false;
+  appState.safmrMetros = [];
+  updateAltButton();
   appState.selectedStateCode = stateCode;
   appState.polygonsByFips.clear();
   appState.areaByFips.clear();
@@ -306,30 +346,41 @@ async function loadState(stateCode, { skipZoom = false } = {}) {
     const stateFipsCode = appState.stateFips[stateCode];
     if (!stateFipsCode) throw new Error(`No FIPS code for state ${stateCode}`);
 
-    // Load GeoJSON + HUD county list + FMR data in parallel
-    const [geojson, countiesResp] = await Promise.all([
+    // Load county GeoJSON + optional town GeoJSON + HUD area list in parallel
+    const [countyGeojson, townGeojson, countiesResp] = await Promise.all([
       fetch(`/data/counties/${stateFipsCode}.json`).then(r => r.ok ? r.json() : Promise.reject('GeoJSON not found')),
+      fetch(`/data/towns/${stateFipsCode}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
       api(`/api/counties/${stateCode}`),
     ]);
 
     appState.counties = countiesResp.data || countiesResp;
+
+    // Detect town-level data: HUD defines FMR at the town level for some New England states
+    const isTownLevel = townGeojson !== null && appState.counties.some(a => a.town_name);
+    if (isTownLevel && townGeojson) {
+      // Strip Census placeholder features (ocean/unorganized areas with no real name)
+      townGeojson.features = townGeojson.features.filter(
+        f => f.properties.NAME && !f.properties.NAME.toLowerCase().includes('not defined')
+      );
+    }
+    const geojson = isTownLevel ? townGeojson : countyGeojson;
 
     // Build a name→FIPS lookup from GeoJSON for metro matching
     const nameToFips = new Map();
     for (const f of geojson.features) {
       const name = f.properties.NAME.toLowerCase();
       nameToFips.set(name, f.id);
-      // Also store "X county" variant
       nameToFips.set(name + ' county', f.id);
     }
 
     // Build areaByFips: for each HUD area, figure out which FIPS polygons it covers
     for (const area of appState.counties) {
-      const entityId = area.fips_code || area.cbsacode || area.entity_id;
-
       if (area.metro_status === '0' || !area.metro_status) {
-        // Non-metro county: use first 5 digits of the 10-digit HUD fips_code
-        const fips = (area.fips_code || '').toString().slice(0, 5);
+        // Town-level states (e.g. MA): match by full 10-digit FIPS
+        // County-level states: use first 5 digits
+        const fips = isTownLevel
+          ? (area.fips_code || '').toString()
+          : (area.fips_code || '').toString().slice(0, 5);
         appState.areaByFips.set(fips, area);
       } else {
         // Metro area: parse counties_msa string into individual county names
@@ -344,19 +395,68 @@ async function loadState(stateCode, { skipZoom = false } = {}) {
           const fips = nameToFips.get(cname) || nameToFips.get(cname.replace(/ county$/, ''));
           if (fips) appState.areaByFips.set(fips, area);
         }
-        // Also try direct FIPS if available
         if (area.fips_code) {
           appState.areaByFips.set(area.fips_code.toString().padStart(5,'0'), area);
         }
       }
     }
 
-    // Load FMR data for both years
+    // For town-level states: some municipalities changed Census place codes (e.g. towns that
+    // incorporated as cities) but HUD kept the old FIPS. For GeoJSON polygons that have no
+    // areaByFips match, try a name-based fallback against the HUD area list.
+    if (isTownLevel) {
+      const norm = n => n.toLowerCase().replace(/\s+town\s+city$/, ' city').trim();
+      const areaByName = new Map();
+      for (const area of appState.counties) {
+        areaByName.set(norm(area.town_name || ''), area);
+      }
+      for (const f of geojson.features) {
+        if (appState.areaByFips.has(f.id)) continue; // already matched by FIPS
+        const area = areaByName.get(norm(f.properties.NAME));
+        if (area) appState.areaByFips.set(f.id, area);
+      }
+    }
+
+    // Load FMR data for both years (also populates appState.safmrMetros)
     showOverlay('Loading rent data…');
     await Promise.allSettled([
       loadStateFmr(stateCode, appState.currentYear),
       loadStateFmr(stateCode, appState.previousYear),
     ]);
+
+    // For town-level states: statedata uses year-specific FIPS codes that may differ from the
+    // current FIPS in listCounties. Alias any missing lookups by normalized town name so that
+    // older years (e.g. towns that later became cities) still display correctly.
+    if (isTownLevel) {
+      const normT = n => n.toLowerCase().replace(/\s+(town city|town|city|village)$/i, '').trim();
+      for (const year of [appState.currentYear, appState.previousYear]) {
+        // Build name → fmrData entry from what statedata actually stored this year
+        const entryByName = new Map();
+        for (const [k, entry] of appState.fmrData) {
+          if (!k.endsWith(`_${year}`)) continue;
+          const tn = (entry.data || entry).town_name;
+          if (tn) entryByName.set(normT(tn), entry);
+        }
+        // For each current-FIPS area that has no fmrData, alias from the name lookup
+        for (const [, area] of appState.areaByFips) {
+          if (!area.town_name) continue;
+          const key = fmrKey(area.fips_code, year);
+          if (appState.fmrData.has(key)) continue;
+          const entry = entryByName.get(normT(area.town_name));
+          if (entry) appState.fmrData.set(key, entry);
+        }
+      }
+    }
+
+    // MRVP mode: switch to MRVP payment-standard view (MA only)
+    if (appState.mrvpMode && stateCode === 'MA' && MRVP_YEARS.has(appState.currentYear)) {
+      return loadMrvpState(stateCode, { skipZoom });
+    }
+
+    // SAFMR mode: switch to ZIP-level Small Area FMR view
+    if (appState.safmrMode && appState.safmrMetros.length > 0) {
+      return loadSafmrState(stateCode, { skipZoom });
+    }
 
     // Render the choropleth
     renderPolygons(geojson, skipZoom);
@@ -375,8 +475,7 @@ async function loadState(stateCode, { skipZoom = false } = {}) {
 
 async function loadStateFmr(stateCode, year) {
   try {
-    const data     = await api(`/api/fmr-state/${stateCode}?year=${year}`);
-    // HUD statedata returns { data: { metroareas: [...], counties: [...] } }
+    const data       = await api(`/api/fmr-state/${stateCode}?year=${year}`);
     const inner      = data.data || data;
     const counties   = inner.counties   || [];
     const metroareas = inner.metroareas || [];
@@ -384,7 +483,191 @@ async function loadStateFmr(stateCode, year) {
       const id = area.fips_code || area.code || area.cbsacode || area.entity_id;
       if (id) appState.fmrData.set(fmrKey(id, year), { data: area });
     }
+    // Detect SAFMR metros in the current-year load
+    if (year === appState.currentYear) {
+      appState.safmrMetros = metroareas.filter(m => String(m.smallarea_status) === '1');
+      updateSafmrButton();
+    }
   } catch (e) { console.warn(`State FMR ${stateCode}/${year}:`, e.message); }
+}
+
+async function loadSafmrState(stateCode, { skipZoom = false } = {}) {
+  appState.selectedStateCode = stateCode;
+  appState.polygonsByFips.clear();
+  appState.areaByFips.clear();
+  appState.fmrData.clear();
+  appState.counties = [];
+  appState.selectedAreaId = null;
+  elDetailPanel.classList.add('hidden');
+  elMapMessage.classList.add('hidden');
+
+  showOverlay('Loading ZIP data…');
+
+  try {
+    const stateFipsCode = appState.stateFips[stateCode];
+    if (!stateFipsCode) throw new Error(`No FIPS for ${stateCode}`);
+
+    // Load statedata for both years + ZIP GeoJSON in parallel
+    const [stateCurr, statePrev, geojson] = await Promise.all([
+      api(`/api/fmr-state/${stateCode}?year=${appState.currentYear}`).catch(() => null),
+      api(`/api/fmr-state/${stateCode}?year=${appState.previousYear}`).catch(() => null),
+      fetch(`/data/zips/${stateFipsCode}.json`).then(r => {
+        if (!r.ok) throw new Error(`ZIP GeoJSON not found for ${stateCode}`);
+        return r.json();
+      }),
+    ]);
+
+    // Ingest county/metro-level FMR (used for non-SAFMR areas shown grey)
+    for (const [data, year] of [[stateCurr, appState.currentYear], [statePrev, appState.previousYear]]) {
+      const inner = data?.data || {};
+      for (const area of [...(inner.counties || []), ...(inner.metroareas || [])]) {
+        const id = area.fips_code || area.code;
+        if (id) appState.fmrData.set(fmrKey(id, year), { data: area });
+      }
+    }
+
+    // Identify SAFMR metros from current-year statedata
+    const safmrMetros = (stateCurr?.data?.metroareas || [])
+      .filter(m => String(m.smallarea_status) === '1');
+    appState.safmrMetros = safmrMetros;
+    updateSafmrButton();
+
+    if (safmrMetros.length === 0) throw new Error('No Small Area FMR metros found for this state');
+
+    // Fetch per-metro ZIP-level FMR data (basicdata has one entry per ZIP)
+    showOverlay('Loading ZIP rent data…');
+    const metroCodes = safmrMetros.map(m => m.code);
+    const [zipDataCurr, zipDataPrev] = await Promise.all([
+      Promise.allSettled(metroCodes.map(c => api(`/api/fmr/${c}?year=${appState.currentYear}`))),
+      Promise.allSettled(metroCodes.map(c => api(`/api/fmr/${c}?year=${appState.previousYear}`))),
+    ]);
+
+    // Ingest ZIP-level data: keyed by 5-digit ZIP
+    for (const [results, year] of [[zipDataCurr, appState.currentYear], [zipDataPrev, appState.previousYear]]) {
+      for (const [i, result] of results.entries()) {
+        if (result.status !== 'fulfilled') continue;
+        const metro   = safmrMetros[i];
+        const rawBd   = result.value?.data?.basicdata;
+        const entries = Array.isArray(rawBd) ? rawBd : [];
+        for (const entry of entries) {
+          const raw = entry.zip_code?.toString();
+          if (!raw || raw === 'MSA level') continue;
+          const zip = raw.padStart(5, '0');
+          appState.fmrData.set(fmrKey(zip, year), { data: entry });
+          if (year === appState.currentYear) {
+            appState.areaByFips.set(zip, {
+              fips_code:    zip,
+              zip_code:     zip,
+              area_name:    `ZIP ${zip}`,
+              metro_name:   metro.metro_name,
+              metro_status: '1',
+            });
+          }
+        }
+      }
+    }
+
+    // Normalize ZIP GeoJSON feature IDs to 5-digit strings
+    const sampleProps = geojson.features[0]?.properties || {};
+    const zipProp = 'ZCTA5CE20' in sampleProps ? 'ZCTA5CE20'
+                  : 'ZCTA5CE10' in sampleProps ? 'ZCTA5CE10'
+                  : 'GEOID10'   in sampleProps ? 'GEOID10'
+                  : null;
+    for (const f of geojson.features) {
+      const raw = zipProp ? f.properties[zipProp] : f.id;
+      f.id = raw ? raw.toString().padStart(5, '0') : String(f.id);
+    }
+
+    showOverlay('Rendering…');
+    renderPolygons(geojson, skipZoom);
+    refreshStatesLayer();
+    buildTrendsList();
+    hideOverlay();
+    localStorage.setItem('fmrmap_last_state', stateCode);
+
+  } catch (e) {
+    hideOverlay();
+    console.error(e);
+    appState.safmrMode = false;
+    updateSafmrButton();
+    elMapMessage.classList.remove('hidden');
+    elMapMessage.querySelector('p').textContent = `ZIP view unavailable for ${stateCode}: ${e.message}`;
+  }
+}
+
+async function loadMrvpState(stateCode, { skipZoom = false } = {}) {
+  const year      = appState.currentYear;
+  const prevYear  = appState.previousYear;
+  const stateFips = appState.stateFips[stateCode];
+  const useZip    = year >= 2024;
+
+  appState.selectedStateCode = stateCode;
+  appState.polygonsByFips.clear();
+  appState.areaByFips.clear();
+  appState.fmrData.clear();
+  appState.counties = [];
+  appState.selectedAreaId = null;
+  elDetailPanel.classList.add('hidden');
+  elMapMessage.classList.add('hidden');
+
+  showOverlay('Loading MRVP data…');
+
+  try {
+    const geoPath = useZip ? `/data/zips/${stateFips}.json` : `/data/towns/${stateFips}.json`;
+    const prevPath = MRVP_YEARS.has(prevYear) ? `/data/mrvp/${prevYear}.json` : null;
+
+    const [mrvpCurr, mrvpPrev, geojson] = await Promise.all([
+      fetch(`/data/mrvp/${year}.json`).then(r => { if (!r.ok) throw new Error(`No MRVP data for FY${year}`); return r.json(); }),
+      prevPath ? fetch(prevPath).then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null),
+      fetch(geoPath).then(r => r.json()),
+    ]);
+
+    if (useZip) {
+      // Normalize ZIP GeoJSON feature IDs
+      const sampleProps = geojson.features[0]?.properties || {};
+      const zipProp = 'ZCTA5CE20' in sampleProps ? 'ZCTA5CE20'
+                    : 'ZCTA5CE10' in sampleProps ? 'ZCTA5CE10'
+                    : 'GEOID10'   in sampleProps ? 'GEOID10' : null;
+      for (const f of geojson.features) {
+        const raw = zipProp ? f.properties[zipProp] : f.id;
+        f.id = raw ? raw.toString().padStart(5, '0') : String(f.id);
+      }
+
+      for (const [zip, entry] of Object.entries(mrvpCurr)) {
+        appState.areaByFips.set(zip, { fips_code: zip, zip_code: zip, area_name: `ZIP ${zip}`, town_name: entry.town || '', mrvp: true });
+        appState.fmrData.set(fmrKey(zip, year), { data: entry });
+      }
+      if (mrvpPrev) {
+        for (const [zip, entry] of Object.entries(mrvpPrev)) {
+          appState.fmrData.set(fmrKey(zip, prevYear), { data: entry });
+        }
+      }
+    } else {
+      // Town mode (2023) — normalize name, match to town GeoJSON features
+      const normT = n => n.toLowerCase().replace(/\s+(town city|town|city|village)$/i, '').trim();
+      for (const f of geojson.features) {
+        const key   = normT(f.properties.NAME || '');
+        const entry = mrvpCurr[key];
+        if (!entry) continue;
+        appState.areaByFips.set(f.id, { fips_code: f.id, area_name: f.properties.NAME, town_name: f.properties.NAME, mrvp: true });
+        appState.fmrData.set(fmrKey(f.id, year), { data: entry });
+      }
+    }
+
+    renderPolygons(geojson, skipZoom);
+    refreshStatesLayer();
+    buildTrendsList();
+    hideOverlay();
+    localStorage.setItem('fmrmap_last_state', stateCode);
+
+  } catch (e) {
+    hideOverlay();
+    console.error(e);
+    appState.mrvpMode = false;
+    updateAltButton();
+    elMapMessage.classList.remove('hidden');
+    elMapMessage.querySelector('p').textContent = `MRVP data unavailable: ${e.message}`;
+  }
 }
 
 async function loadEntityFmr(entityId, year) {
@@ -436,6 +719,10 @@ function renderPolygons(geojson, skipZoom = false) {
     elMapLegend.classList.remove('hidden');
     elLegendMin.textContent = fmt(Math.min(...rents));
     elLegendMax.textContent = fmt(Math.max(...rents));
+    const br = BEDROOM_LABELS[appState.selectedBedroom].short;
+    const prefix = appState.mrvpMode ? 'MRVP' : 'Monthly FMR';
+    document.getElementById('bedroomLegendLabel').textContent = br;
+    document.querySelector('.legend-title').firstChild.textContent = `${prefix} · `;
   }
 
   const layer = L.geoJSON(geojson, {
@@ -446,7 +733,7 @@ function renderPolygons(geojson, skipZoom = false) {
 
       const area = appState.areaByFips.get(fips);
       const rent = area ? getRentForArea(area) : null;
-      const name = area?.area_name || area?.county_name || feature.properties.NAME;
+      const name = area?.area_name || area?.town_name || area?.county_name || feature.properties.NAME;
 
       layer.bindTooltip(buildTooltip(name, rent), {
         className: 'fmr-tooltip', sticky: true, offset: [10, 0],
@@ -507,12 +794,12 @@ function refreshPolygonStyles() {
     layer.setStyle({
       fillColor:   getRentColor(rent),
       fillOpacity: rent ? 0.78 : 0.15,
-      color:       isSelected ? '#4fd1c5' : '#0d1b2a',
+      color:       isSelected ? '#4fd1c5' : (isLight() ? '#9aa5c0' : '#0d1b2a'),
       weight:      isSelected ? 2.5 : 0.6,
     });
 
     // Update tooltip content
-    const name = area?.area_name || area?.county_name || layer.feature?.properties?.NAME;
+    const name = area?.area_name || area?.town_name || area?.county_name || layer.feature?.properties?.NAME;
     layer.setTooltipContent(buildTooltip(name, rent));
   });
 
@@ -543,7 +830,7 @@ async function selectArea(area, fips) {
   highlightAreaPolygons(area, fips);
 
   const entityId = area.fips_code || area.cbsacode || area.entity_id;
-  const name = area.area_name || area.county_name || area.town_name || 'Unknown';
+  const name = area.area_name || area.town_name || area.county_name || 'Unknown';
   const stateLabel = area.state_code || appState.selectedStateCode;
 
   elAreaName.textContent   = name;
@@ -562,14 +849,26 @@ async function selectArea(area, fips) {
   setTimeout(() => map.invalidateSize({ animate: false }), 50);
   showPanelLoading();
 
-  const [curr, prev] = await Promise.all([
-    loadEntityFmr(entityId, appState.currentYear),
-    loadEntityFmr(entityId, appState.previousYear),
-  ]);
+  // In SAFMR/MRVP modes all data is pre-loaded; skip the per-entity API call
+  const [curr, prev] = (appState.safmrMode || appState.mrvpMode)
+    ? [appState.fmrData.get(fmrKey(entityId, appState.currentYear)),
+       appState.fmrData.get(fmrKey(entityId, appState.previousYear))]
+    : await Promise.all([
+        loadEntityFmr(entityId, appState.currentYear),
+        loadEntityFmr(entityId, appState.previousYear),
+      ]);
 
-  elMetroStatus.textContent = area.metro_status === '1'
-    ? `Metro area · ${area.metro_name || ''}`
-    : 'Non-metropolitan county';
+  elMetroStatus.textContent = appState.mrvpMode
+    ? (appState.currentYear >= 2024
+        ? `MRVP Payment Standard · ZIP ${area.zip_code || fips}`
+        : `MRVP Payment Standard · ${area.town_name || fips}`)
+    : appState.safmrMode
+      ? `Small Area FMR · ZIP ${area.zip_code || fips}`
+      : area.metro_status === '1'
+        ? `Metro area · ${area.metro_name || ''}`
+        : area.town_name
+          ? `Town-level FMR · ${area.county_name || ''}`
+          : 'Non-metropolitan county';
 
   renderPanel(curr, prev);
   refreshTrendsSelection();
@@ -717,7 +1016,7 @@ function buildTrendsList() {
 
     const diff = cv - pv;
     const pct  = (diff / pv) * 100;
-    const name = area.area_name || area.county_name || area.town_name || 'Unknown';
+    const name = area.area_name || area.town_name || area.county_name || 'Unknown';
 
     rows.push({ fips, area, id, name, cv, pv, diff, pct });
   }
@@ -842,6 +1141,11 @@ elYearSelect.addEventListener('change', async e => {
   appState.previousYear = appState.currentYear - 1;
   elCurrentYearLbl.textContent = `FY ${appState.currentYear}`;
   elPrevYearLbl.textContent    = `FY ${appState.previousYear}`;
+  // If MRVP mode is on but the new year has no MRVP data, turn it off
+  if (appState.mrvpMode && !MRVP_YEARS.has(appState.currentYear)) {
+    appState.mrvpMode = false;
+  }
+  updateAltButton();
   const prevAreaId = appState.selectedAreaId;
   if (appState.selectedStateCode) {
     await loadState(appState.selectedStateCode, { skipZoom: !!prevAreaId });
@@ -929,6 +1233,28 @@ document.querySelectorAll('.year-tab').forEach(tab => {
       }
     }
   });
+});
+
+// ── Alt-view toggle (MRVP for MA, ZIP/SAFMR for other states) ─────────────
+elSafmrToggle.addEventListener('click', () => {
+  const state = appState.selectedStateCode;
+  if (state === 'MA') {
+    appState.mrvpMode = !appState.mrvpMode;
+    updateAltButton();
+    if (appState.mrvpMode) {
+      loadMrvpState(state);
+    } else {
+      loadState(state);
+    }
+  } else {
+    appState.safmrMode = !appState.safmrMode;
+    updateAltButton();
+    if (appState.safmrMode) {
+      loadSafmrState(state);
+    } else {
+      loadState(state);
+    }
+  }
 });
 
 // ── Theme ──────────────────────────────────────────────

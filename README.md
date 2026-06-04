@@ -36,17 +36,22 @@ Press **YOY Trends** in the header to rank every area in the state by rent chang
 **Bedroom & fiscal year selectors**
 Switch between bedroom sizes or any fiscal year back to FY 2017 — the entire map recolors instantly.
 
+**Small Area FMR (ZIP view)**
+For states where HUD publishes ZIP-code-level Small Area FMRs — including Texas, New Jersey, Connecticut, and New York — a **ZIP** button appears in the header. Toggle it to switch from county-level to ZIP-level rent data. Areas with SAFMR designations (e.g. Dallas, Fort Worth, Houston, San Antonio) render at full ZIP granularity; areas without SAFMR show grey.
+
+**Massachusetts town-level view**
+Massachusetts FMRs are defined at the municipality level — 351 individual towns rather than 14 counties. The map automatically renders at town granularity for MA, with name-based fallback matching to handle the handful of towns that changed Census FIPS codes when they incorporated as cities.
+
+**Massachusetts MRVP payment standards**
+For Massachusetts, the ZIP button becomes an **MRVP** button (FY 2023–2025). Toggle it to display the Massachusetts Rental Voucher Program payment standards instead of HUD FMRs:
+- **FY 2024 & 2025** — ZIP-level MRVP ceiling rents derived from HUD Small Area FMRs (switched to SAFMR effective March 1, 2024)
+- **FY 2023** — Town-level ceiling rents at 100% area-wide FMR (pre-SAFMR)
+
 **Light / dark mode**
 Toggle between dark and light basemaps from the header. Preference is saved automatically.
 
 **Session memory**
 The last selected state is restored on return visits. First-time visitors see a guide to the app's features.
-
----
-
-## Planned Features
-
-- **Small Area FMR (SAFMR) support** — HUD has implemented ZIP-code-level FMRs in certain metropolitan areas including Massachusetts and Connecticut. A future update will detect SAFMR states and display ZIP-level rent data instead of county-level FMRs for those areas.
 
 ---
 
@@ -123,8 +128,10 @@ The `.env` file is never committed or baked into the Docker image — it is inje
 ## Data Sources
 
 - **[HUD USER API](https://www.huduser.gov/hudapi/public)** — Fair Market Rent data
-- **US Census Bureau TIGER/Line** — County boundary polygons
+- **US Census Bureau TIGER/Line** — County and town boundary polygons (via Census cartographic boundary files)
+- **OpenDataDE** — State-level ZIP code boundary polygons
 - **Natural Earth** — US state boundary polygons
+- **EOHLC / Mass.gov** — Massachusetts MRVP payment standard schedules (FY 2023–2025)
 
 ---
 

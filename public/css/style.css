@@ -217,6 +217,19 @@ body { display:flex; flex-direction:column; }
 .about-btn:hover { border-color: var(--accent-dim); color: var(--text); }
 .about-btn { font-weight: 600; }
 
+/* ── SAFMR (ZIP view) toggle button ─────────────── */
+.safmr-toggle-btn {
+  height: 30px; padding: 0 10px; border-radius: 15px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  color: var(--text-faint);
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; font-weight: 500;
+  cursor: pointer; transition: all .15s; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; align-self: center;
+}
+.safmr-toggle-btn:hover:not(:disabled) { border-color: var(--accent-dim); color: var(--text); }
+.safmr-toggle-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(79,209,197,.08); }
+.safmr-toggle-btn:disabled { opacity: 0.35; cursor: default; }
+
 /* ── Trends toggle button ────────────────────────── */
 .trends-toggle-btn {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
@@ -539,6 +552,7 @@ body { display:flex; flex-direction:column; }
   .trends-toggle-btn { padding: 5px 10px; flex-shrink: 0; }
   .trends-btn-label { font-size: 8px; letter-spacing: .08em; }
   .theme-toggle-btn { width: 28px; height: 28px; flex-shrink: 0; }
+  .safmr-toggle-btn { height: 28px; padding: 0 8px; font-size: 8px; flex-shrink: 0; }
 }
 
 /* Narrow phones: two-row header */
@@ -599,5 +613,6 @@ body { display:flex; flex-direction:column; }
 @media (hover: none) and (pointer: coarse) {
   .close-btn { width: 40px; height: 40px; font-size: 14px; }
   .theme-toggle-btn { width: 40px; height: 40px; font-size: 16px; }
+  .safmr-toggle-btn { height: 38px; padding: 0 12px; font-size: 10px; }
   .select-control { padding-top: 8px; padding-bottom: 8px; }
 }
