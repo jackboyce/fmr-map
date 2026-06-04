@@ -526,10 +526,8 @@ body { display:flex; flex-direction:column; }
   .trend-row { padding-top: 13px; padding-bottom: 13px; }
 }
 
-@media (max-width:720px) {
-  :root { --panel-w: 100%; --trends-w: 100%; }
-
-  /* Header: two-row layout — title on top, controls below */
+/* ── Compact header for tablets and narrow screens ───── */
+@media (max-width:960px) {
   .site-header {
     flex-direction: column; align-items: stretch;
     height: auto;
@@ -537,7 +535,6 @@ body { display:flex; flex-direction:column; }
   }
   .header-left { gap: 8px; }
   .header-title { font-size: 17px; }
-  /* Hide labels to keep the controls row compact */
   .control-label { display: none; }
   .header-controls { gap: 6px; flex-wrap: nowrap; }
   .select-control { font-size: 12px; padding: 5px 22px 5px 7px; flex-shrink: 0; }
@@ -545,6 +542,11 @@ body { display:flex; flex-direction:column; }
   .trends-toggle-btn { padding: 5px 10px; flex-shrink: 0; }
   .trends-btn-label { font-size: 8px; letter-spacing: .08em; }
   .theme-toggle-btn { width: 28px; height: 28px; flex-shrink: 0; }
+}
+
+/* ── Mobile panel layout ──────────────────────────────── */
+@media (max-width:720px) {
+  :root { --panel-w: 100%; --trends-w: 100%; }
 
   /* ? button floats at bottom-right, behind panels */
   .about-btn {
