@@ -834,13 +834,27 @@ function refreshTrendsSelection() {
 // ── Event listeners ───────────────────────────────────
 elStateSelect.addEventListener('change', e => loadState(e.target.value));
 
-elYearSelect.addEventListener('change', e => {
+elYearSelect.addEventListener('change', async e => {
   appState.currentYear  = +e.target.value;
   appState.previousYear = appState.currentYear - 1;
   elCurrentYearLbl.textContent = `FY ${appState.currentYear}`;
   elPrevYearLbl.textContent    = `FY ${appState.previousYear}`;
-  appState.fmrData.clear();
-  if (appState.selectedStateCode) loadState(appState.selectedStateCode);
+  const prevAreaId = appState.selectedAreaId;
+  if (appState.selectedStateCode) {
+    await loadState(appState.selectedStateCode);
+    if (prevAreaId) {
+      const area = appState.areaByFips.get(prevAreaId);
+      if (area) {
+        await selectArea(area, prevAreaId);
+        // Close the panel if the new year has no data for this county
+        if (elFmrContent.querySelector('.error-state')) {
+          elDetailPanel.classList.add('hidden');
+          syncPanelOpenClass();
+          setTimeout(() => map.invalidateSize({ animate: false }), 30);
+        }
+      }
+    }
+  }
 });
 
 elBedroomSelect.addEventListener('change', e => {
