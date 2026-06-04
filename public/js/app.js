@@ -176,7 +176,7 @@ async function init() {
     elYearSelect.innerHTML = '';
     for (const y of years) {
       const o = document.createElement('option');
-      o.value = y; o.textContent = isMobile() ? `${y}` : `FY ${y}`;
+      o.value = y; o.textContent = isNarrow() ? `${y}` : `FY ${y}`;
       if (y === appState.currentYear) o.selected = true;
       elYearSelect.appendChild(o);
     }
@@ -200,10 +200,10 @@ async function init() {
   try {
     const data  = await api('/api/states');
     const states = (data.data || data).sort((a,b) => a.state_name.localeCompare(b.state_name));
-    elStateSelect.innerHTML = `<option value="">${isMobile() ? 'State' : '— Select a state —'}</option>`;
+    elStateSelect.innerHTML = `<option value="">${isNarrow() ? 'State' : '— Select a state —'}</option>`;
     for (const s of states) {
       const o = document.createElement('option');
-      o.value = s.state_code; o.textContent = isMobile() ? s.state_code : s.state_name;
+      o.value = s.state_code; o.textContent = isNarrow() ? s.state_code : s.state_name;
       elStateSelect.appendChild(o);
     }
     // Restore last visited state, otherwise leave the map on the full US view
@@ -228,9 +228,9 @@ function loadStaticStates() {
     ['OK','Oklahoma'],['OR','Oregon'],['PA','Pennsylvania'],['RI','Rhode Island'],['SC','South Carolina'],
     ['SD','South Dakota'],['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],
     ['VA','Virginia'],['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']];
-  elStateSelect.innerHTML = `<option value="">${isMobile() ? 'State' : '— Select a state —'}</option>`;
+  elStateSelect.innerHTML = `<option value="">${isNarrow() ? 'State' : '— Select a state —'}</option>`;
   for (const [c,n] of S) {
-    const o = document.createElement('option'); o.value=c; o.textContent=isMobile()?c:n; elStateSelect.appendChild(o);
+    const o = document.createElement('option'); o.value=c; o.textContent=isNarrow()?c:n; elStateSelect.appendChild(o);
   }
 }
 
@@ -660,6 +660,7 @@ function renderChangeTable(curr, prev) {
 
 // ── Trends panel ─────────────────────────────────────
 function isMobile() { return window.innerWidth <= 720; }
+function isNarrow() { return window.innerWidth <= 960; }
 
 function toggleTrendsPanel(forceOpen) {
   const open = forceOpen !== undefined ? forceOpen : elTrendsPanel.classList.contains('hidden');
