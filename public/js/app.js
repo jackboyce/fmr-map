@@ -555,6 +555,7 @@ async function selectArea(area, fips) {
   }
   elDetailPanel.classList.remove('hidden');
   syncPanelOpenClass();
+  setTimeout(() => map.invalidateSize({ animate: false }), 50);
   showPanelLoading();
 
   const [curr, prev] = await Promise.all([
@@ -858,17 +859,18 @@ elBedroomSelect.addEventListener('change', e => {
 elTrendsToggle.addEventListener('click', () => {
   toggleTrendsPanel();
   buildTrendsList();
+  setTimeout(() => map.invalidateSize({ animate: false }), 250);
 });
 
 elCloseTrends.addEventListener('click', () => {
   toggleTrendsPanel(false);
-  requestAnimationFrame(() => {
+  setTimeout(() => {
     // Counteract Leaflet's re-centring pan: the map grows leftward by the
     // panel width, so pan right by half that amount to keep the view stable.
     const TRENDS_W = window.innerWidth <= 720 ? 0 : 320;
     map.invalidateSize({ animate: false, pan: false });
     if (TRENDS_W > 0) map.panBy([-TRENDS_W / 2, 0], { animate: false });
-  });
+  }, 250);
 });
 
 elClosePanel.addEventListener('click', () => {

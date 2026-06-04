@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Secrets — never commit the real token
+.env
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Claude Code session files
+.claude/
+
+# Session handoff docs (local only)
+HANDOFF.md
+
+# Build artifacts
+npm-debug.log*
