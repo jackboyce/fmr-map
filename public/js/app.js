@@ -85,6 +85,12 @@ const map = L.map('map', {
   attributionControl: true,
 });
 
+// Suppress hover highlights during any map movement (drag + inertia).
+// mapAnimating is already checked in each layer's mouseover handler.
+map.on('movestart', () => { appState.mapAnimating = true;  clearHoveredLayer(); });
+map.on('moveend',   () => { appState.mapAnimating = false; });
+window.addEventListener('blur', clearHoveredLayer);
+
 map.attributionControl.setPrefix(
   '<a href="https://github.com/jackboyce/fmr-map" target="_blank" rel="noopener">Jack Boyce</a> | <a href="https://leafletjs.com" title="A JavaScript library for interactive maps">Leaflet</a>'
 );
@@ -311,7 +317,7 @@ function updateAltButton() {
       : 'No MRVP data available for this year';
   } else {
     const canSafmr = appState.safmrMetros.length > 0;
-    elSafmrToggle.textContent = 'ZIP';
+    elSafmrToggle.textContent = 'SAFMR';
     elSafmrToggle.disabled    = !canSafmr;
     elSafmrToggle.classList.toggle('active', canSafmr && appState.safmrMode);
     const n = appState.safmrMetros.length;
@@ -732,27 +738,33 @@ function renderPolygons(geojson, skipZoom = false) {
       appState.polygonsByFips.set(fips, layer);
 
       const area = appState.areaByFips.get(fips);
-      const rent = area ? getRentForArea(area) : null;
       const name = area?.area_name || area?.town_name || area?.county_name || feature.properties.NAME;
 
-      layer.bindTooltip(buildTooltip(name, rent), {
-        className: 'fmr-tooltip', sticky: true, offset: [10, 0],
-      });
-
       layer.on({
-        mouseover: e => { if (!appState.mapAnimating && fips !== appState.selectedAreaId) highlightLayer(e.target); },
-        mouseout:  e => { if (fips !== appState.selectedAreaId) layer.setStyle(styleFeature(feature)); },
-        click:     () => {
+        mouseover: e => {
+          if (appState.mapAnimating || fips === appState.selectedAreaId) return;
+          highlightLayer(e.target);
+          showHoverTooltip(buildTooltip(name, area ? getRentForArea(area) : null), e.latlng);
+        },
+        mousemove: e => {
+          if (!appState.mapAnimating && fips !== appState.selectedAreaId) {
+            moveHoverTooltip(e.latlng);
+          }
+        },
+        mouseout: e => {
+          if (fips !== appState.selectedAreaId) layer.setStyle(styleFeature(feature));
+          hideHoverTooltip();
+        },
+        click: () => {
           if (area) selectArea(area, fips);
         },
       });
     },
   });
 
+  clearHoveredLayer();
   appState.geojsonLayer = layer.addTo(map);
   if (!skipZoom) {
-    appState.mapAnimating = true;
-    map.once('moveend', () => { appState.mapAnimating = false; });
     map.fitBounds(safeBounds(layer).pad(0.05));
   }
 }
@@ -771,9 +783,44 @@ function styleFeature(feature) {
   };
 }
 
+// ── Single shared hover tooltip ───────────────────────
+// Using one map-level tooltip avoids Leaflet's per-layer auto-reopen behavior
+// which causes phantom duplicate tooltips on overlapping polygons.
+const _hoverTip = L.tooltip({ className: 'fmr-tooltip', offset: [12, 0], direction: 'right' });
+
+function showHoverTooltip(content, latlng) {
+  _hoverTip.setContent(content);
+  _hoverTip.setLatLng(latlng);
+  if (!_hoverTip._map) map.openTooltip(_hoverTip);
+}
+
+function moveHoverTooltip(latlng) {
+  if (_hoverTip._map) _hoverTip.setLatLng(latlng);
+}
+
+function hideHoverTooltip() {
+  if (_hoverTip._map) map.closeTooltip(_hoverTip);
+}
+
+let _hoveredLayer = null;
+
 function highlightLayer(layer) {
+  if (_hoveredLayer && _hoveredLayer !== layer) {
+    const f = _hoveredLayer.feature;
+    if (f) _hoveredLayer.setStyle(styleFeature(f));
+  }
+  _hoveredLayer = layer;
   layer.setStyle({ weight: 2, color: '#a0e4dc', fillOpacity: 0.9 });
   layer.bringToFront();
+}
+
+function clearHoveredLayer() {
+  if (_hoveredLayer) {
+    const f = _hoveredLayer.feature;
+    if (f) _hoveredLayer.setStyle(styleFeature(f));
+    _hoveredLayer = null;
+  }
+  hideHoverTooltip();
 }
 
 function buildTooltip(name, rent) {
@@ -798,9 +845,6 @@ function refreshPolygonStyles() {
       weight:      isSelected ? 2.5 : 0.6,
     });
 
-    // Update tooltip content
-    const name = area?.area_name || area?.town_name || area?.county_name || layer.feature?.properties?.NAME;
-    layer.setTooltipContent(buildTooltip(name, rent));
   });
 
   // Refresh legend
