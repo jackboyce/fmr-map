@@ -1,0 +1,1978 @@
+{
+  "01432": {
+    "town": "Ayer",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01451": {
+    "town": "Harvard",
+    "efficiency": 2142,
+    "one_br": 2268,
+    "two_br": 2688,
+    "three_br": 3234,
+    "four_br": 3560
+  },
+  "01460": {
+    "town": "Littleton",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01701": {
+    "town": "Framingham",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01702": {
+    "town": "Framingham",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01719": {
+    "town": "Boxborough",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01720": {
+    "town": "Acton",
+    "efficiency": 2477,
+    "one_br": 2600,
+    "two_br": 3089,
+    "three_br": 3703,
+    "four_br": 4089
+  },
+  "01721": {
+    "town": "Ashland",
+    "efficiency": 2751,
+    "one_br": 2888,
+    "two_br": 3434,
+    "three_br": 4116,
+    "four_br": 4547
+  },
+  "01730": {
+    "town": "Bedford",
+    "efficiency": 2804,
+    "one_br": 2941,
+    "two_br": 3497,
+    "three_br": 4191,
+    "four_br": 4632
+  },
+  "01740": {
+    "town": "Bolton",
+    "efficiency": 1600,
+    "one_br": 1770,
+    "two_br": 2321,
+    "three_br": 3228,
+    "four_br": 3622
+  },
+  "01741": {
+    "town": "Carlisle",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01742": {
+    "town": "Concord",
+    "efficiency": 2951,
+    "one_br": 3098,
+    "two_br": 3675,
+    "three_br": 4410,
+    "four_br": 4862
+  },
+  "01746": {
+    "town": "Holliston",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01748": {
+    "town": "Hopkinton",
+    "efficiency": 2709,
+    "one_br": 2846,
+    "two_br": 3381,
+    "three_br": 4053,
+    "four_br": 4473
+  },
+  "01749": {
+    "town": "Hudson",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01752": {
+    "town": "Marlborough",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01754": {
+    "town": "Maynard",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01756": {
+    "town": "Mendon",
+    "efficiency": 2142,
+    "one_br": 2268,
+    "two_br": 2772,
+    "three_br": 3854,
+    "four_br": 4326
+  },
+  "01757": {
+    "town": "Milford",
+    "efficiency": 1419,
+    "one_br": 1569,
+    "two_br": 2058,
+    "three_br": 2862,
+    "four_br": 3212
+  },
+  "01760": {
+    "town": "Natick",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01770": {
+    "town": "Sherborn",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01772": {
+    "town": "Southborough",
+    "efficiency": 2153,
+    "one_br": 2384,
+    "two_br": 3129,
+    "three_br": 4347,
+    "four_br": 4883
+  },
+  "01773": {
+    "town": "Lincoln",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01775": {
+    "town": "Stow",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01776": {
+    "town": "Sudbury",
+    "efficiency": 2636,
+    "one_br": 2773,
+    "two_br": 3287,
+    "three_br": 3939,
+    "four_br": 4348
+  },
+  "01778": {
+    "town": "Wayland",
+    "efficiency": 2519,
+    "one_br": 2644,
+    "two_br": 3140,
+    "three_br": 3765,
+    "four_br": 4158
+  },
+  "01801": {
+    "town": "Woburn",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01803": {
+    "town": "Burlington",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01810": {
+    "town": "Andover",
+    "efficiency": 2132,
+    "one_br": 2352,
+    "two_br": 3087,
+    "three_br": 3707,
+    "four_br": 4085
+  },
+  "01821": {
+    "town": "Billerica",
+    "efficiency": 1541,
+    "one_br": 1703,
+    "two_br": 2234,
+    "three_br": 2679,
+    "four_br": 2959
+  },
+  "01824": {
+    "town": "Chelmsford",
+    "efficiency": 2142,
+    "one_br": 2321,
+    "two_br": 3045,
+    "three_br": 3654,
+    "four_br": 4032
+  },
+  "01826": {
+    "town": "Dracut",
+    "efficiency": 1541,
+    "one_br": 1703,
+    "two_br": 2234,
+    "three_br": 2679,
+    "four_br": 2959
+  },
+  "01830": {
+    "town": "Haverhill",
+    "efficiency": 1488,
+    "one_br": 1644,
+    "two_br": 2157,
+    "three_br": 2587,
+    "four_br": 2857
+  },
+  "01832": {
+    "town": "Haverhill",
+    "efficiency": 1488,
+    "one_br": 1644,
+    "two_br": 2157,
+    "three_br": 2587,
+    "four_br": 2857
+  },
+  "01833": {
+    "town": "Georgetown",
+    "efficiency": 2174,
+    "one_br": 2405,
+    "two_br": 3150,
+    "three_br": 3780,
+    "four_br": 4169
+  },
+  "01834": {
+    "town": "Groveland",
+    "efficiency": 1644,
+    "one_br": 1817,
+    "two_br": 2384,
+    "three_br": 2859,
+    "four_br": 3157
+  },
+  "01835": {
+    "town": "Haverhill",
+    "efficiency": 1488,
+    "one_br": 1644,
+    "two_br": 2157,
+    "three_br": 2587,
+    "four_br": 2857
+  },
+  "01840": {
+    "town": "Lawrence",
+    "efficiency": 1488,
+    "one_br": 1644,
+    "two_br": 2157,
+    "three_br": 2587,
+    "four_br": 2857
+  },
+  "01841": {
+    "town": "Lawrence",
+    "efficiency": 1488,
+    "one_br": 1644,
+    "two_br": 2157,
+    "three_br": 2587,
+    "four_br": 2857
+  },
+  "01843": {
+    "town": "Lawrence",
+    "efficiency": 1488,
+    "one_br": 1644,
+    "two_br": 2157,
+    "three_br": 2587,
+    "four_br": 2857
+  },
+  "01844": {
+    "town": "Methuen",
+    "efficiency": 1488,
+    "one_br": 1644,
+    "two_br": 2157,
+    "three_br": 2587,
+    "four_br": 2857
+  },
+  "01845": {
+    "town": "North Andover",
+    "efficiency": 2164,
+    "one_br": 2395,
+    "two_br": 3140,
+    "three_br": 3771,
+    "four_br": 4159
+  },
+  "01850": {
+    "town": "Lowell",
+    "efficiency": 1541,
+    "one_br": 1703,
+    "two_br": 2234,
+    "three_br": 2679,
+    "four_br": 2959
+  },
+  "01851": {
+    "town": "Lowell",
+    "efficiency": 1541,
+    "one_br": 1703,
+    "two_br": 2234,
+    "three_br": 2679,
+    "four_br": 2959
+  },
+  "01852": {
+    "town": "Lowell",
+    "efficiency": 1541,
+    "one_br": 1703,
+    "two_br": 2234,
+    "three_br": 2679,
+    "four_br": 2959
+  },
+  "01854": {
+    "town": "Tyngsboro",
+    "efficiency": 1541,
+    "one_br": 1703,
+    "two_br": 2234,
+    "three_br": 2679,
+    "four_br": 2959
+  },
+  "01860": {
+    "town": "Merrimac",
+    "efficiency": 1488,
+    "one_br": 1644,
+    "two_br": 2157,
+    "three_br": 2587,
+    "four_br": 2857
+  },
+  "01862": {
+    "town": "North Billerica",
+    "efficiency": 1541,
+    "one_br": 1703,
+    "two_br": 2234,
+    "three_br": 2679,
+    "four_br": 2959
+  },
+  "01864": {
+    "town": "North Reading",
+    "efficiency": 2668,
+    "one_br": 2804,
+    "two_br": 3329,
+    "three_br": 3991,
+    "four_br": 4411
+  },
+  "01867": {
+    "town": "Reading",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01876": {
+    "town": "Tewksbury",
+    "efficiency": 2353,
+    "one_br": 2605,
+    "two_br": 3413,
+    "three_br": 4096,
+    "four_br": 4516
+  },
+  "01879": {
+    "town": "Tyngsboro",
+    "efficiency": 1541,
+    "one_br": 1703,
+    "two_br": 2234,
+    "three_br": 2679,
+    "four_br": 2959
+  },
+  "01880": {
+    "town": "Wakefield",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01886": {
+    "town": "Westford",
+    "efficiency": 2500,
+    "one_br": 2762,
+    "two_br": 3623,
+    "three_br": 4348,
+    "four_br": 4800
+  },
+  "01887": {
+    "town": "Wilmington",
+    "efficiency": 2930,
+    "one_br": 3077,
+    "two_br": 3654,
+    "three_br": 4379,
+    "four_br": 4841
+  },
+  "01890": {
+    "town": "Winchester",
+    "efficiency": 2615,
+    "one_br": 2752,
+    "two_br": 3266,
+    "three_br": 3918,
+    "four_br": 4327
+  },
+  "01901": {
+    "town": "Lynn",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01902": {
+    "town": "Lynn",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01904": {
+    "town": "Lynn",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01905": {
+    "town": "Lynn",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01906": {
+    "town": "Saugus",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01907": {
+    "town": "Swampscott",
+    "efficiency": 2605,
+    "one_br": 2731,
+    "two_br": 3245,
+    "three_br": 3886,
+    "four_br": 4296
+  },
+  "01908": {
+    "town": "Nahant",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01913": {
+    "town": "Amesbury",
+    "efficiency": 2477,
+    "one_br": 2600,
+    "two_br": 3089,
+    "three_br": 3703,
+    "four_br": 4089
+  },
+  "01915": {
+    "town": "Beverly",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01921": {
+    "town": "Boxford",
+    "efficiency": 2142,
+    "one_br": 2268,
+    "two_br": 2688,
+    "three_br": 3234,
+    "four_br": 3560
+  },
+  "01923": {
+    "town": "Danvers",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01929": {
+    "town": "Essex",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01930": {
+    "town": "Gloucester",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01938": {
+    "town": "Ipswich",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01940": {
+    "town": "Lynnfield",
+    "efficiency": 2741,
+    "one_br": 2878,
+    "two_br": 3413,
+    "three_br": 4096,
+    "four_br": 4516
+  },
+  "01944": {
+    "town": "Manchester",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01945": {
+    "town": "Marblehead",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01949": {
+    "town": "Middleton",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01950": {
+    "town": "Newburyport",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01951": {
+    "town": "Newbury",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01952": {
+    "town": "Salisbury",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01960": {
+    "town": "Peabody",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01966": {
+    "town": "Rockport",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01969": {
+    "town": "Rowley",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01970": {
+    "town": "Salem",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "01983": {
+    "town": "Topsfield",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01984": {
+    "town": "Wenham",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "01985": {
+    "town": "West Newbury",
+    "efficiency": 2227,
+    "one_br": 2458,
+    "two_br": 3224,
+    "three_br": 3865,
+    "four_br": 4264
+  },
+  "02019": {
+    "town": "Bellingham",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02021": {
+    "town": "Canton",
+    "efficiency": 2646,
+    "one_br": 2772,
+    "two_br": 3297,
+    "three_br": 3948,
+    "four_br": 4368
+  },
+  "02025": {
+    "town": "Cohasset",
+    "efficiency": 2668,
+    "one_br": 2804,
+    "two_br": 3329,
+    "three_br": 3991,
+    "four_br": 4411
+  },
+  "02026": {
+    "town": "Dedham",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02030": {
+    "town": "Dover",
+    "efficiency": 3098,
+    "one_br": 3255,
+    "two_br": 3864,
+    "three_br": 4631,
+    "four_br": 5114
+  },
+  "02032": {
+    "town": "East Walpole",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02035": {
+    "town": "Foxboro",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02038": {
+    "town": "Franklin",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02043": {
+    "town": "Hingham",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02045": {
+    "town": "Hull",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02048": {
+    "town": "Mansfield",
+    "efficiency": 2142,
+    "one_br": 2268,
+    "two_br": 2688,
+    "three_br": 3234,
+    "four_br": 3560
+  },
+  "02050": {
+    "town": "Marshfield",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02052": {
+    "town": "Medfield",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02053": {
+    "town": "Medway",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02054": {
+    "town": "Millis",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02056": {
+    "town": "Norfolk",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02061": {
+    "town": "Norwell",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02062": {
+    "town": "Norwood",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02066": {
+    "town": "Scituate",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02067": {
+    "town": "Sharon",
+    "efficiency": 2783,
+    "one_br": 2919,
+    "two_br": 3465,
+    "three_br": 4158,
+    "four_br": 4589
+  },
+  "02072": {
+    "town": "Stoughton",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02081": {
+    "town": "Walpole",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02090": {
+    "town": "Westwood",
+    "efficiency": 2699,
+    "one_br": 2836,
+    "two_br": 3371,
+    "three_br": 4044,
+    "four_br": 4464
+  },
+  "02093": {
+    "town": "Wrentham",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02108": {
+    "town": "Boston - Beacon Hill",
+    "efficiency": 3045,
+    "one_br": 3200,
+    "two_br": 3800,
+    "three_br": 4556,
+    "four_br": 5033
+  },
+  "02109": {
+    "town": "Boston",
+    "efficiency": 3574,
+    "one_br": 3746,
+    "two_br": 4452,
+    "three_br": 5341,
+    "four_br": 5896
+  },
+  "02110": {
+    "town": "Boston - Financial Disctrict",
+    "efficiency": 3574,
+    "one_br": 3746,
+    "two_br": 4452,
+    "three_br": 5341,
+    "four_br": 5896
+  },
+  "02111": {
+    "town": "Boston - Chinatown",
+    "efficiency": 3107,
+    "one_br": 3264,
+    "two_br": 3870,
+    "three_br": 4644,
+    "four_br": 5126
+  },
+  "02113": {
+    "town": "Boston - North End",
+    "efficiency": 2909,
+    "one_br": 3050,
+    "two_br": 3623,
+    "three_br": 4348,
+    "four_br": 4801
+  },
+  "02114": {
+    "town": "Boston - West End",
+    "efficiency": 3404,
+    "one_br": 3567,
+    "two_br": 4240,
+    "three_br": 5087,
+    "four_br": 5615
+  },
+  "02115": {
+    "town": "Boston - Fenway",
+    "efficiency": 2547,
+    "one_br": 2674,
+    "two_br": 3175,
+    "three_br": 3807,
+    "four_br": 4204
+  },
+  "02116": {
+    "town": "Boston - Back Bay",
+    "efficiency": 3542,
+    "one_br": 3722,
+    "two_br": 4421,
+    "three_br": 5301,
+    "four_br": 5853
+  },
+  "02118": {
+    "town": "Boston - South End / Roxbury",
+    "efficiency": 2367,
+    "one_br": 2484,
+    "two_br": 2950,
+    "three_br": 3537,
+    "four_br": 3906
+  },
+  "02119": {
+    "town": "Boston - Roxbury",
+    "efficiency": 2268,
+    "one_br": 2381,
+    "two_br": 2827,
+    "three_br": 3390,
+    "four_br": 3744
+  },
+  "02120": {
+    "town": "Boston - Roxbury",
+    "efficiency": 2287,
+    "one_br": 2400,
+    "two_br": 2850,
+    "three_br": 3417,
+    "four_br": 3774
+  },
+  "02121": {
+    "town": "Boston - Dorchester / Roxbury",
+    "efficiency": 2268,
+    "one_br": 2381,
+    "two_br": 2827,
+    "three_br": 3390,
+    "four_br": 3744
+  },
+  "02122": {
+    "town": "Boston - Dorchester",
+    "efficiency": 2268,
+    "one_br": 2381,
+    "two_br": 2827,
+    "three_br": 3390,
+    "four_br": 3744
+  },
+  "02124": {
+    "town": "Boston - Dorchester",
+    "efficiency": 2268,
+    "one_br": 2381,
+    "two_br": 2827,
+    "three_br": 3390,
+    "four_br": 3744
+  },
+  "02125": {
+    "town": "Boston - Dorchester",
+    "efficiency": 2268,
+    "one_br": 2381,
+    "two_br": 2827,
+    "three_br": 3390,
+    "four_br": 3744
+  },
+  "02126": {
+    "town": "Boston - Mattapan",
+    "efficiency": 2268,
+    "one_br": 2381,
+    "two_br": 2827,
+    "three_br": 3390,
+    "four_br": 3744
+  },
+  "02127": {
+    "town": "Boston - South Boston",
+    "efficiency": 2888,
+    "one_br": 3031,
+    "two_br": 3600,
+    "three_br": 4313,
+    "four_br": 4769
+  },
+  "02128": {
+    "town": "Boston - East Boston",
+    "efficiency": 2268,
+    "one_br": 2381,
+    "two_br": 2827,
+    "three_br": 3390,
+    "four_br": 3744
+  },
+  "02129": {
+    "town": "Boston - Charlestown",
+    "efficiency": 3064,
+    "one_br": 3217,
+    "two_br": 3825,
+    "three_br": 4587,
+    "four_br": 5062
+  },
+  "02130": {
+    "town": "Boston - Jamaica Plain",
+    "efficiency": 2612,
+    "one_br": 2736,
+    "two_br": 3250,
+    "three_br": 3899,
+    "four_br": 4299
+  },
+  "02131": {
+    "town": "Boston - Roslindale",
+    "efficiency": 2382,
+    "one_br": 2500,
+    "two_br": 2969,
+    "three_br": 3560,
+    "four_br": 3932
+  },
+  "02132": {
+    "town": "Boston - West Roxbury",
+    "efficiency": 2384,
+    "one_br": 2503,
+    "two_br": 2972,
+    "three_br": 3564,
+    "four_br": 3936
+  },
+  "02134": {
+    "town": "Boston - Allston",
+    "efficiency": 2527,
+    "one_br": 2652,
+    "two_br": 3150,
+    "three_br": 3777,
+    "four_br": 4171
+  },
+  "02135": {
+    "town": "Boston - Brighton",
+    "efficiency": 2627,
+    "one_br": 2757,
+    "two_br": 3270,
+    "three_br": 3924,
+    "four_br": 4327
+  },
+  "02136": {
+    "town": "Boston - Hyde Park",
+    "efficiency": 2382,
+    "one_br": 2500,
+    "two_br": 2969,
+    "three_br": 3560,
+    "four_br": 3932
+  },
+  "02138": {
+    "town": "Cambridge",
+    "efficiency": 3560,
+    "one_br": 3739,
+    "two_br": 4442,
+    "three_br": 5325,
+    "four_br": 5881
+  },
+  "02139": {
+    "town": "Cambridge",
+    "efficiency": 3371,
+    "one_br": 3539,
+    "two_br": 4200,
+    "three_br": 5040,
+    "four_br": 5565
+  },
+  "02140": {
+    "town": "Cambridge",
+    "efficiency": 3077,
+    "one_br": 3224,
+    "two_br": 3833,
+    "three_br": 4600,
+    "four_br": 5073
+  },
+  "02141": {
+    "town": "Cambridge",
+    "efficiency": 3203,
+    "one_br": 3360,
+    "two_br": 3990,
+    "three_br": 4788,
+    "four_br": 5282
+  },
+  "02142": {
+    "town": "Cambridge",
+    "efficiency": 3382,
+    "one_br": 3550,
+    "two_br": 4211,
+    "three_br": 5052,
+    "four_br": 5577
+  },
+  "02143": {
+    "town": "Somerville",
+    "efficiency": 2920,
+    "one_br": 3067,
+    "two_br": 3644,
+    "three_br": 4369,
+    "four_br": 4821
+  },
+  "02144": {
+    "town": "Somerville",
+    "efficiency": 3066,
+    "one_br": 3213,
+    "two_br": 3822,
+    "three_br": 4578,
+    "four_br": 5061
+  },
+  "02145": {
+    "town": "Somerville",
+    "efficiency": 2825,
+    "one_br": 2962,
+    "two_br": 3518,
+    "three_br": 4222,
+    "four_br": 4663
+  },
+  "02148": {
+    "town": "Malden",
+    "efficiency": 2553,
+    "one_br": 2679,
+    "two_br": 3182,
+    "three_br": 3815,
+    "four_br": 4214
+  },
+  "02149": {
+    "town": "Everett",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02150": {
+    "town": "Chelsea",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02151": {
+    "town": "Revere",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02152": {
+    "town": "Winthrop",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02155": {
+    "town": "Medford",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02163": {
+    "town": "Boston - Harvard Business",
+    "efficiency": 3312,
+    "one_br": 3476,
+    "two_br": 4130,
+    "three_br": 4949,
+    "four_br": 5469
+  },
+  "02169": {
+    "town": "Quincy",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02170": {
+    "town": "Quincy",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02171": {
+    "town": "Quincy",
+    "efficiency": 2553,
+    "one_br": 2679,
+    "two_br": 3182,
+    "three_br": 3815,
+    "four_br": 4214
+  },
+  "02176": {
+    "town": "Melrose",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02180": {
+    "town": "Stoneham",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02184": {
+    "town": "Braintree",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02186": {
+    "town": "Milton",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02188": {
+    "town": "Weymouth",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02189": {
+    "town": "East Weymouth",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02190": {
+    "town": "South Weymouth",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02191": {
+    "town": "North Weymouth",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02199": {
+    "town": "Boston - Downtown",
+    "efficiency": 3574,
+    "one_br": 3746,
+    "two_br": 4452,
+    "three_br": 5341,
+    "four_br": 5896
+  },
+  "02210": {
+    "town": "Boston - Seaport",
+    "efficiency": 3395,
+    "one_br": 3568,
+    "two_br": 4240,
+    "three_br": 5075,
+    "four_br": 5607
+  },
+  "02215": {
+    "town": "Boston - Kenmore",
+    "efficiency": 3020,
+    "one_br": 3178,
+    "two_br": 3770,
+    "three_br": 4521,
+    "four_br": 4994
+  },
+  "02301": {
+    "town": "Brockton",
+    "efficiency": 1550,
+    "one_br": 1674,
+    "two_br": 2196,
+    "three_br": 2746,
+    "four_br": 2908
+  },
+  "02302": {
+    "town": "Brockton",
+    "efficiency": 1550,
+    "one_br": 1674,
+    "two_br": 2196,
+    "three_br": 2746,
+    "four_br": 2908
+  },
+  "02322": {
+    "town": "Avon",
+    "efficiency": 1550,
+    "one_br": 1674,
+    "two_br": 2196,
+    "three_br": 2746,
+    "four_br": 2908
+  },
+  "02324": {
+    "town": "Bridgewater",
+    "efficiency": 1974,
+    "one_br": 2132,
+    "two_br": 2793,
+    "three_br": 3497,
+    "four_br": 3696
+  },
+  "02330": {
+    "town": "Carver",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02332": {
+    "town": "Duxbury",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02333": {
+    "town": "East Bridgewater",
+    "efficiency": 1713,
+    "one_br": 1850,
+    "two_br": 2427,
+    "three_br": 3035,
+    "four_br": 3214
+  },
+  "02334": {
+    "town": "Easton",
+    "efficiency": 1835,
+    "one_br": 1847,
+    "two_br": 2423,
+    "three_br": 2905,
+    "four_br": 3496
+  },
+  "02338": {
+    "town": "Halifax",
+    "efficiency": 2142,
+    "one_br": 2268,
+    "two_br": 2688,
+    "three_br": 3234,
+    "four_br": 3560
+  },
+  "02339": {
+    "town": "Hanover",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02341": {
+    "town": "Hanson",
+    "efficiency": 1550,
+    "one_br": 1674,
+    "two_br": 2196,
+    "three_br": 2746,
+    "four_br": 2908
+  },
+  "02343": {
+    "town": "Holbrook",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02346": {
+    "town": "Middleboro",
+    "efficiency": 1550,
+    "one_br": 1674,
+    "two_br": 2196,
+    "three_br": 2746,
+    "four_br": 2908
+  },
+  "02347": {
+    "town": "Lakeville",
+    "efficiency": 1891,
+    "one_br": 2038,
+    "two_br": 2678,
+    "three_br": 3351,
+    "four_br": 3550
+  },
+  "02351": {
+    "town": "Abington",
+    "efficiency": 1550,
+    "one_br": 1673,
+    "two_br": 2196,
+    "three_br": 2745,
+    "four_br": 2907
+  },
+  "02356": {
+    "town": "North Easton",
+    "efficiency": 2036,
+    "one_br": 2049,
+    "two_br": 2688,
+    "three_br": 3223,
+    "four_br": 3879
+  },
+  "02357": {
+    "town": "North Easton",
+    "efficiency": 1835,
+    "one_br": 1847,
+    "two_br": 2423,
+    "three_br": 2905,
+    "four_br": 3496
+  },
+  "02359": {
+    "town": "Pembroke",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02360": {
+    "town": "Plymouth",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02364": {
+    "town": "Kingston",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02367": {
+    "town": "Plympton",
+    "efficiency": 2142,
+    "one_br": 2268,
+    "two_br": 2688,
+    "three_br": 3234,
+    "four_br": 3560
+  },
+  "02368": {
+    "town": "Randolph",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02370": {
+    "town": "Rockland",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02375": {
+    "town": "South Easton",
+    "efficiency": 2289,
+    "one_br": 2300,
+    "two_br": 3024,
+    "three_br": 3623,
+    "four_br": 4358
+  },
+  "02379": {
+    "town": "West Bridgewater",
+    "efficiency": 1840,
+    "one_br": 1981,
+    "two_br": 2600,
+    "three_br": 3248,
+    "four_br": 3445
+  },
+  "02382": {
+    "town": "Whitman",
+    "efficiency": 1550,
+    "one_br": 1674,
+    "two_br": 2196,
+    "three_br": 2746,
+    "four_br": 2908
+  },
+  "02420": {
+    "town": "Lexington",
+    "efficiency": 3077,
+    "one_br": 3224,
+    "two_br": 3833,
+    "three_br": 4600,
+    "four_br": 5073
+  },
+  "02421": {
+    "town": "Lexington",
+    "efficiency": 3539,
+    "one_br": 3717,
+    "two_br": 4410,
+    "three_br": 5292,
+    "four_br": 5838
+  },
+  "02445": {
+    "town": "Brookline",
+    "efficiency": 3339,
+    "one_br": 3497,
+    "two_br": 4158,
+    "three_br": 4988,
+    "four_br": 5502
+  },
+  "02446": {
+    "town": "Brookline",
+    "efficiency": 3581,
+    "one_br": 3760,
+    "two_br": 4463,
+    "three_br": 5356,
+    "four_br": 5913
+  },
+  "02451": {
+    "town": "Waltham",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02452": {
+    "town": "Waltham",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02453": {
+    "town": "Waltham",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02458": {
+    "town": "Newton",
+    "efficiency": 2636,
+    "one_br": 2773,
+    "two_br": 3287,
+    "three_br": 3939,
+    "four_br": 4348
+  },
+  "02459": {
+    "town": "Newton Center",
+    "efficiency": 2888,
+    "one_br": 3035,
+    "two_br": 3602,
+    "three_br": 4317,
+    "four_br": 4768
+  },
+  "02460": {
+    "town": "Newton - Newtonville",
+    "efficiency": 2857,
+    "one_br": 2993,
+    "two_br": 3560,
+    "three_br": 4264,
+    "four_br": 4716
+  },
+  "02461": {
+    "town": "Newton Highlands",
+    "efficiency": 3665,
+    "one_br": 3844,
+    "two_br": 4568,
+    "three_br": 5482,
+    "four_br": 6049
+  },
+  "02462": {
+    "town": "Newton - Lower Falls",
+    "efficiency": 2752,
+    "one_br": 2888,
+    "two_br": 3434,
+    "three_br": 4117,
+    "four_br": 4548
+  },
+  "02464": {
+    "town": "Newton - Upper Falls",
+    "efficiency": 3004,
+    "one_br": 3161,
+    "two_br": 3749,
+    "three_br": 4495,
+    "four_br": 4968
+  },
+  "02465": {
+    "town": "Newton - West Newton",
+    "efficiency": 2668,
+    "one_br": 2804,
+    "two_br": 3329,
+    "three_br": 3991,
+    "four_br": 4411
+  },
+  "02466": {
+    "town": "Newton - Auburndale",
+    "efficiency": 2730,
+    "one_br": 2867,
+    "two_br": 3402,
+    "three_br": 4074,
+    "four_br": 4505
+  },
+  "02467": {
+    "town": "Chestnut Hill",
+    "efficiency": 3423,
+    "one_br": 3591,
+    "two_br": 4263,
+    "three_br": 5114,
+    "four_br": 5649
+  },
+  "02468": {
+    "town": "Newton - Waban",
+    "efficiency": 3088,
+    "one_br": 3245,
+    "two_br": 3854,
+    "three_br": 4611,
+    "four_br": 5104
+  },
+  "02472": {
+    "town": "Watertown",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02474": {
+    "town": "Arlington",
+    "efficiency": 2615,
+    "one_br": 2741,
+    "two_br": 3255,
+    "three_br": 3906,
+    "four_br": 4305
+  },
+  "02476": {
+    "town": "Arlington",
+    "efficiency": 2477,
+    "one_br": 2600,
+    "two_br": 3089,
+    "three_br": 3703,
+    "four_br": 4089
+  },
+  "02478": {
+    "town": "Belmont",
+    "efficiency": 2814,
+    "one_br": 2951,
+    "two_br": 3507,
+    "three_br": 4200,
+    "four_br": 4641
+  },
+  "02481": {
+    "town": "Wellesley Hills",
+    "efficiency": 3392,
+    "one_br": 3560,
+    "two_br": 4232,
+    "three_br": 5073,
+    "four_br": 5608
+  },
+  "02482": {
+    "town": "Wellesley",
+    "efficiency": 3350,
+    "one_br": 3518,
+    "two_br": 4179,
+    "three_br": 5009,
+    "four_br": 5534
+  },
+  "02492": {
+    "town": "Needham",
+    "efficiency": 2650,
+    "one_br": 2778,
+    "two_br": 3300,
+    "three_br": 3960,
+    "four_br": 4373
+  },
+  "02493": {
+    "town": "Weston",
+    "efficiency": 2553,
+    "one_br": 2679,
+    "two_br": 3182,
+    "three_br": 3815,
+    "four_br": 4214
+  },
+  "02494": {
+    "town": "Needham Hills",
+    "efficiency": 2561,
+    "one_br": 2688,
+    "two_br": 3192,
+    "three_br": 3827,
+    "four_br": 4227
+  },
+  "02532": {
+    "town": "Buzzards Bay",
+    "efficiency": 1743,
+    "one_br": 1754,
+    "two_br": 2301,
+    "three_br": 2836,
+    "four_br": 3257
+  },
+  "02538": {
+    "town": "East Wareham",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02558": {
+    "town": "Onset",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02571": {
+    "town": "Wareham",
+    "efficiency": 2242,
+    "one_br": 2353,
+    "two_br": 2794,
+    "three_br": 3350,
+    "four_br": 3700
+  },
+  "02703": {
+    "town": "Attleboro",
+    "efficiency": 1586,
+    "one_br": 1691,
+    "two_br": 2079,
+    "three_br": 2510,
+    "four_br": 2982
+  },
+  "02715": {
+    "town": "Dighton",
+    "efficiency": 1505,
+    "one_br": 1664,
+    "two_br": 2182,
+    "three_br": 2691,
+    "four_br": 2889
+  },
+  "02719": {
+    "town": "Fairhaven",
+    "efficiency": 1264,
+    "one_br": 1293,
+    "two_br": 1604,
+    "three_br": 1924,
+    "four_br": 2405
+  },
+  "02720": {
+    "town": "Fall River",
+    "efficiency": 1253,
+    "one_br": 1333,
+    "two_br": 1643,
+    "three_br": 1984,
+    "four_br": 2357
+  },
+  "02721": {
+    "town": "Fall River",
+    "efficiency": 1253,
+    "one_br": 1333,
+    "two_br": 1643,
+    "three_br": 1984,
+    "four_br": 2357
+  },
+  "02723": {
+    "town": "Fall River",
+    "efficiency": 1253,
+    "one_br": 1333,
+    "two_br": 1643,
+    "three_br": 1984,
+    "four_br": 2357
+  },
+  "02724": {
+    "town": "Fall River",
+    "efficiency": 1253,
+    "one_br": 1333,
+    "two_br": 1643,
+    "three_br": 1984,
+    "four_br": 2357
+  },
+  "02725": {
+    "town": "Somerset",
+    "efficiency": 1385,
+    "one_br": 1473,
+    "two_br": 1816,
+    "three_br": 2193,
+    "four_br": 2605
+  },
+  "02726": {
+    "town": "Somerset",
+    "efficiency": 1471,
+    "one_br": 1555,
+    "two_br": 1922,
+    "three_br": 2322,
+    "four_br": 2763
+  },
+  "02738": {
+    "town": "Marion",
+    "efficiency": 2142,
+    "one_br": 2268,
+    "two_br": 2688,
+    "three_br": 3234,
+    "four_br": 3560
+  },
+  "02739": {
+    "town": "Mattapoisett",
+    "efficiency": 1713,
+    "one_br": 1850,
+    "two_br": 2427,
+    "three_br": 3035,
+    "four_br": 3214
+  },
+  "02740": {
+    "town": "New Bedford",
+    "efficiency": 1144,
+    "one_br": 1169,
+    "two_br": 1451,
+    "three_br": 1740,
+    "four_br": 2176
+  },
+  "02743": {
+    "town": "Acushnet",
+    "efficiency": 1264,
+    "one_br": 1292,
+    "two_br": 1604,
+    "three_br": 1923,
+    "four_br": 2404
+  },
+  "02744": {
+    "town": "New Bedford",
+    "efficiency": 1144,
+    "one_br": 1169,
+    "two_br": 1451,
+    "three_br": 1740,
+    "four_br": 2176
+  },
+  "02745": {
+    "town": "New Bedford",
+    "efficiency": 1144,
+    "one_br": 1169,
+    "two_br": 1451,
+    "three_br": 1740,
+    "four_br": 2176
+  },
+  "02746": {
+    "town": "New Bedford",
+    "efficiency": 1144,
+    "one_br": 1169,
+    "two_br": 1451,
+    "three_br": 1740,
+    "four_br": 2176
+  },
+  "02747": {
+    "town": "Dartmouth",
+    "efficiency": 1144,
+    "one_br": 1169,
+    "two_br": 1451,
+    "three_br": 1740,
+    "four_br": 2176
+  },
+  "02748": {
+    "town": "Dartmouth",
+    "efficiency": 1144,
+    "one_br": 1169,
+    "two_br": 1451,
+    "three_br": 1740,
+    "four_br": 2176
+  },
+  "02760": {
+    "town": "North Attleboro",
+    "efficiency": 2142,
+    "one_br": 2268,
+    "two_br": 2688,
+    "three_br": 3234,
+    "four_br": 3560
+  },
+  "02762": {
+    "town": "Plainville",
+    "efficiency": 2478,
+    "one_br": 2601,
+    "two_br": 3089,
+    "three_br": 3704,
+    "four_br": 4090
+  },
+  "02766": {
+    "town": "Norton",
+    "efficiency": 2058,
+    "one_br": 2268,
+    "two_br": 2982,
+    "three_br": 3675,
+    "four_br": 3948
+  },
+  "02767": {
+    "town": "Raynham",
+    "efficiency": 2028,
+    "one_br": 2041,
+    "two_br": 2678,
+    "three_br": 3211,
+    "four_br": 3864
+  },
+  "02769": {
+    "town": "Rehoboth",
+    "efficiency": 1385,
+    "one_br": 1473,
+    "two_br": 1816,
+    "three_br": 2193,
+    "four_br": 2605
+  },
+  "02770": {
+    "town": "Rochester",
+    "efficiency": 1713,
+    "one_br": 1850,
+    "two_br": 2427,
+    "three_br": 3035,
+    "four_br": 3214
+  },
+  "02771": {
+    "town": "Seekonk",
+    "efficiency": 1901,
+    "one_br": 2017,
+    "two_br": 2489,
+    "three_br": 3004,
+    "four_br": 3571
+  },
+  "02777": {
+    "town": "Swansea",
+    "efficiency": 1502,
+    "one_br": 1597,
+    "two_br": 1964,
+    "three_br": 2374,
+    "four_br": 2815
+  },
+  "02779": {
+    "town": "Freetown",
+    "efficiency": 1607,
+    "one_br": 1723,
+    "two_br": 2216,
+    "three_br": 2710,
+    "four_br": 3067
+  },
+  "02780": {
+    "town": "Taunton",
+    "efficiency": 1362,
+    "one_br": 1506,
+    "two_br": 1975,
+    "three_br": 2436,
+    "four_br": 2615
+  },
+  "02790": {
+    "town": "Westport",
+    "efficiency": 1253,
+    "one_br": 1333,
+    "two_br": 1643,
+    "three_br": 1984,
+    "four_br": 2357
+  }
+}

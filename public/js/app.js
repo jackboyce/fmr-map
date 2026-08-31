@@ -315,7 +315,7 @@ function refreshStatesLayer() {
 }
 
 // ── SAFMR button state ────────────────────────────────
-const MRVP_YEARS = new Set([2023, 2024, 2025]);
+const MRVP_YEARS = new Set([2023, 2024, 2025, 2026]);
 
 function updateAltButton() {
   const state = appState.selectedStateCode;
