@@ -95,26 +95,29 @@ map.attributionControl.setPrefix(
   '<a href="https://github.com/jackboyce/fmr-map" target="_blank" rel="noopener">Jack Boyce</a> | <a href="https://leafletjs.com" title="A JavaScript library for interactive maps">Leaflet</a>'
 );
 
-const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services';
-const TILES = {
-  dark: {
-    base:   `${ESRI}/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}`,
-    labels: `${ESRI}/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}`,
-  },
-  light: {
-    base:   `${ESRI}/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}`,
-    labels: `${ESRI}/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}`,
-  },
-};
-const ESRI_ATTR = 'Tiles © <a href="https://www.esri.com/">Esri</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+function makeTiles(key) {
+  const q = key ? `?api_key=${key}` : '';
+  return {
+    dark: {
+      base:   `https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png${q}`,
+      labels: `https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png${q}`,
+    },
+    light: {
+      base:   `https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png${q}`,
+      labels: `https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png${q}`,
+    },
+  };
+}
+let TILES = makeTiles('');
+const CARTO_ATTR = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>';
 
-let tileBase   = L.tileLayer(TILES.dark.base,   { attribution: ESRI_ATTR, maxZoom: 16 }).addTo(map);
+let tileBase   = L.tileLayer(TILES.dark.base,   { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 19 }).addTo(map);
 
 // Labels on top pane
 const labelPane = map.createPane('labels');
 labelPane.style.zIndex = 450;
 labelPane.style.pointerEvents = 'none';
-let tileLabels = L.tileLayer(TILES.dark.labels, { attribution: '', maxZoom: 16, pane: 'labels' }).addTo(map);
+let tileLabels = L.tileLayer(TILES.dark.labels, { attribution: '', subdomains: 'abcd', maxZoom: 19, pane: 'labels' }).addTo(map);
 
 // ── Helpers ──────────────────────────────────────────
 const fmt    = n => (n == null || n === 0) ? 'N/A' : '$' + Math.round(n).toLocaleString();
@@ -182,6 +185,16 @@ function hideOverlay() { elLoadingOverlay.classList.add('hidden'); }
 
 // ── Initialise ───────────────────────────────────────
 async function init() {
+  // Fetch server config (keeps API keys out of the client bundle)
+  try {
+    const cfg = await api('/api/config');
+    if (cfg.cartoKey) {
+      TILES = makeTiles(cfg.cartoKey);
+      tileBase.setUrl(TILES.dark.base);
+      tileLabels.setUrl(TILES.dark.labels);
+    }
+  } catch {}
+
   // Load years
   try {
     const years = await api('/api/years');

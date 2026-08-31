@@ -6,8 +6,9 @@ const path       = require('path');
 
 const app      = express();
 const PORT     = process.env.PORT || 3000;
-const HUD_TOKEN = process.env.HUD_API_TOKEN || '';
-const HUD_BASE  = 'https://www.huduser.gov/hudapi/public';
+const HUD_TOKEN  = process.env.HUD_API_TOKEN || '';
+const CARTO_KEY  = process.env.CARTO_API_KEY || '';
+const HUD_BASE   = 'https://www.huduser.gov/hudapi/public';
 
 app.use(compression());
 app.use(express.static(path.join(__dirname, '../public')));
@@ -46,6 +47,8 @@ const STATE_FIPS = {
 };
 
 app.get('/api/state-fips', (_req, res) => res.json(STATE_FIPS));
+
+app.get('/api/config', (_req, res) => res.json({ cartoKey: CARTO_KEY }));
 
 // ── HUD endpoints ─────────────────────────────────────
 app.get('/api/states', async (_req, res) => {
