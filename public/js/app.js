@@ -95,25 +95,26 @@ map.attributionControl.setPrefix(
   '<a href="https://github.com/jackboyce/fmr-map" target="_blank" rel="noopener">Jack Boyce</a> | <a href="https://leafletjs.com" title="A JavaScript library for interactive maps">Leaflet</a>'
 );
 
+const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services';
 const TILES = {
   dark: {
-    base:   'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
-    labels: 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',
+    base:   `${ESRI}/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}`,
+    labels: `${ESRI}/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}`,
   },
   light: {
-    base:   'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-    labels: 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',
+    base:   `${ESRI}/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}`,
+    labels: `${ESRI}/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}`,
   },
 };
-const CARTO_ATTR = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>';
+const ESRI_ATTR = 'Tiles © <a href="https://www.esri.com/">Esri</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
-let tileBase   = L.tileLayer(TILES.dark.base,   { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 19 }).addTo(map);
+let tileBase   = L.tileLayer(TILES.dark.base,   { attribution: ESRI_ATTR, maxZoom: 16 }).addTo(map);
 
 // Labels on top pane
 const labelPane = map.createPane('labels');
 labelPane.style.zIndex = 450;
 labelPane.style.pointerEvents = 'none';
-let tileLabels = L.tileLayer(TILES.dark.labels, { attribution: '', subdomains: 'abcd', maxZoom: 19, pane: 'labels' }).addTo(map);
+let tileLabels = L.tileLayer(TILES.dark.labels, { attribution: '', maxZoom: 16, pane: 'labels' }).addTo(map);
 
 // ── Helpers ──────────────────────────────────────────
 const fmt    = n => (n == null || n === 0) ? 'N/A' : '$' + Math.round(n).toLocaleString();
