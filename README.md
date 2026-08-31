@@ -64,7 +64,7 @@ The last selected state is restored on return visits. First-time visitors see a 
 | Server-side cache | In-memory Map, 24-hour TTL |
 | Frontend | Vanilla JavaScript (ES modules) |
 | Map engine | [Leaflet.js](https://leafletjs.com/) 1.9 |
-| Map tiles | CartoDB Dark Matter / Positron |
+| Map tiles | [CARTO](https://carto.com/) Dark Matter / Positron (API key required) |
 | Containerisation | Docker + Docker Compose |
 
 ---
@@ -75,6 +75,7 @@ The last selected state is restored on return visits. First-time visitors see a 
 
 - Node.js 20+
 - A free HUD USER API token from [huduser.gov](https://www.huduser.gov/hudapi/public/register)
+- A free CARTO API key from [carto.com](https://carto.com/basemaps/apikey/) (required for map tiles)
 
 ### Run locally
 
@@ -83,7 +84,7 @@ git clone https://github.com/jackboyce/fmr-map.git
 cd fmr-map
 npm install
 cp .env.example .env
-# add your HUD_API_TOKEN to .env
+# edit .env and add your HUD_API_TOKEN and CARTO_API_KEY
 npm start
 ```
 
@@ -118,10 +119,11 @@ See [DEPLOY.md](DEPLOY.md) for the full walkthrough including Nginx reverse prox
 
 | Variable | Required | Description |
 |---|---|---|
-| `HUD_API_TOKEN` | Yes | Bearer token from HUD USER API |
+| `HUD_API_TOKEN` | Yes | Bearer token from [HUD USER API](https://www.huduser.gov/hudapi/public/register) |
+| `CARTO_API_KEY` | Yes | API key from [carto.com/basemaps/apikey](https://carto.com/basemaps/apikey/) for map tiles |
 | `PORT` | No | Server port (default: 3000) |
 
-The `.env` file is never committed or baked into the Docker image — it is injected at runtime via `env_file` in `docker-compose.yml`.
+The `.env` file is never committed or baked into the Docker image — it is injected at runtime via `env_file` in `docker-compose.yml`. The CARTO key is served to the browser via the `/api/config` endpoint so it never appears in the client source bundle.
 
 ---
 
