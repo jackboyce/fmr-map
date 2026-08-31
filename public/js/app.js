@@ -111,13 +111,12 @@ function makeTiles(key) {
 let TILES = makeTiles('');
 const CARTO_ATTR = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>';
 
-let tileBase   = L.tileLayer(TILES.dark.base,   { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 19 }).addTo(map);
-
-// Labels on top pane
+// Tile layers are added after /api/config resolves so the API key is baked in from the first request
+let tileBase   = L.tileLayer('', { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 19 });
 const labelPane = map.createPane('labels');
 labelPane.style.zIndex = 450;
 labelPane.style.pointerEvents = 'none';
-let tileLabels = L.tileLayer(TILES.dark.labels, { attribution: '', subdomains: 'abcd', maxZoom: 19, pane: 'labels' }).addTo(map);
+let tileLabels = L.tileLayer('', { attribution: '', subdomains: 'abcd', maxZoom: 19, pane: 'labels' });
 
 // ── Helpers ──────────────────────────────────────────
 const fmt    = n => (n == null || n === 0) ? 'N/A' : '$' + Math.round(n).toLocaleString();
@@ -185,15 +184,15 @@ function hideOverlay() { elLoadingOverlay.classList.add('hidden'); }
 
 // ── Initialise ───────────────────────────────────────
 async function init() {
-  // Fetch server config (keeps API keys out of the client bundle)
+  // Fetch server config then add tile layers so the API key is in the very first tile request
   try {
     const cfg = await api('/api/config');
-    if (cfg.cartoKey) {
-      TILES = makeTiles(cfg.cartoKey);
-      tileBase.setUrl(TILES.dark.base);
-      tileLabels.setUrl(TILES.dark.labels);
-    }
+    if (cfg.cartoKey) TILES = makeTiles(cfg.cartoKey);
   } catch {}
+  tileBase.setUrl(TILES.dark.base);
+  tileLabels.setUrl(TILES.dark.labels);
+  tileBase.addTo(map);
+  tileLabels.addTo(map);
 
   // Load years
   try {
