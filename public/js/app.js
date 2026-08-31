@@ -96,15 +96,15 @@ map.attributionControl.setPrefix(
 );
 
 function makeTiles(key) {
-  const q = key ? `?api_key=${key}` : '';
+  const q = key ? `?key=${key}` : '';
   return {
     dark: {
-      base:   `https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png${q}`,
-      labels: `https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png${q}`,
+      base:   `https://basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png${q}`,
+      labels: `https://basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png${q}`,
     },
     light: {
-      base:   `https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png${q}`,
-      labels: `https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png${q}`,
+      base:   `https://basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png${q}`,
+      labels: `https://basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png${q}`,
     },
   };
 }
@@ -112,11 +112,11 @@ let TILES = makeTiles('');
 const CARTO_ATTR = '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>';
 
 // Tile layers are added after /api/config resolves so the API key is baked in from the first request
-let tileBase   = L.tileLayer('', { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 19 });
+let tileBase   = L.tileLayer('', { attribution: CARTO_ATTR, maxZoom: 19 });
 const labelPane = map.createPane('labels');
 labelPane.style.zIndex = 450;
 labelPane.style.pointerEvents = 'none';
-let tileLabels = L.tileLayer('', { attribution: '', subdomains: 'abcd', maxZoom: 19, pane: 'labels' });
+let tileLabels = L.tileLayer('', { attribution: '', maxZoom: 19, pane: 'labels' });
 
 // ── Helpers ──────────────────────────────────────────
 const fmt    = n => (n == null || n === 0) ? 'N/A' : '$' + Math.round(n).toLocaleString();
@@ -189,8 +189,9 @@ async function init() {
     const cfg = await api('/api/config');
     if (cfg.cartoKey) TILES = makeTiles(cfg.cartoKey);
   } catch {}
-  tileBase.setUrl(TILES.dark.base);
-  tileLabels.setUrl(TILES.dark.labels);
+  const theme = isLight() ? 'light' : 'dark';
+  tileBase.setUrl(TILES[theme].base);
+  tileLabels.setUrl(TILES[theme].labels);
   tileBase.addTo(map);
   tileLabels.addTo(map);
 
